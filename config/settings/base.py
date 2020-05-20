@@ -71,6 +71,9 @@ THIRD_PARTY_APPS = [
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
+    "bootstrapform",
+    "survey",
+    "social_django",
 ]
 
 LOCAL_APPS = [
@@ -268,5 +271,18 @@ ACCOUNT_ADAPTER = "moodmusic.users.adapters.AccountAdapter"
 SOCIALACCOUNT_ADAPTER = "moodmusic.users.adapters.SocialAccountAdapter"
 
 
-# Your stuff...
+# Social Django App Settings
 # ------------------------------------------------------------------------------
+SOCIAL_AUTH_URL_NAMESPACE = 'social'
+SOCIAL_AUTH_POSTGRES_JSONFIELD = True
+
+SOCIAL_AUTH_SPOTIFY_KEY = '6408ea155e2e4422997d55379a1001a2'
+SOCIAL_AUTH_SPOTIFY_SECRET = os.environ['SPOTIFY_CLIENT_SECRET']
+
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.spotify.SpotifyOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+SOCIAL_AUTH_SPOTIFY_SCOPE = ['user-read-recently-played', 'user-library-read']
+LOGIN_REDIRECT_URL = '/thanks'
