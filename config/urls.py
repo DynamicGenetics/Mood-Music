@@ -16,6 +16,11 @@ urlpatterns = [
     path("users/", include("moodmusic.users.urls", namespace="users")),
     path("accounts/", include("allauth.urls")),
     # Your stuff: custom urls includes go here
+    path("dashboard/", include("moodmusic.dashboard.urls")),
+    path("survey/", include('survey.urls')),
+    path("", include('social_django.urls', namespace='social')),
+
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
