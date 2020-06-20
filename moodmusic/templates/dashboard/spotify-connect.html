@@ -1,0 +1,8 @@
+{% extends "dashboard/base.html" %}
+
+{% block title %}{% block head_title %}Connect Spotify{% endblock head_title %}{% endblock title %}
+
+{% block content %}
+    <h1>Connect your Spotify here!</h1>
+    <a href="{% url 'social:begin' 'spotify' %}">Spotify</a>
+{% endblock content %}
