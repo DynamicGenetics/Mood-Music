@@ -1,0 +1,73 @@
+{% extends "dashboard/base.html" %}
+{% block title %}{% block head_title %}Dashboard{% endblock head_title %}{% endblock title %}
+
+{% block content %}
+
+  <div class="container-fluid">
+    <h1>Dashboard</h1>
+  </div>
+
+  <br />
+
+  <div class="container-fluid">
+    Welcome to your personal dashboard for the Mood Music study! There are four steps below that we need you to complete.  
+    <br />
+    If you have any questions then you can contact <a href="mailto:nina.dicara@bristol.ac.uk">Nina Di Cara</a>.<br>
+  </div>
+
+  <br />
+
+  <div class="container">
+
+    <div class="row">
+      <div class="col-sm">
+        <h4>Step 1</h4>
+      </div>
+      <div class="col-sm">
+        <h4>Step 2</h4>
+      </div>
+      <div class="col-sm">
+        <h4>Step 3</h4>
+      </div>
+      <div class="col-sm">
+        <h4>Step 4</h4>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm">
+        To understand how you listen to music we need access to your Spotify listening history.
+      </div>
+      <div class="col-sm">
+        Before starting we would like you to complete some surveys about your wellbeing and your emotions. These should
+        take no more than 20 minutes. 
+      </div>
+      <div class="col-sm">
+        Your wellbeing surveys will be delivered by text to the number you provided when you signed up. Before you
+        start please read these guidelines on keeping your mobile phone data safe. 
+      </div>
+      <div class="col-sm">
+        Once the two weeks of surveys has finished you will be asked to request your data from Spotify. Here you 
+        will find instructions and the upload box. 
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm">
+        <a href="{% url 'spotify' %}" class="btn btn-primary" role="button">Connect your Spotify account</a>
+      </div>
+      <div class="col-sm">
+        <a href="{% url 'dashboard' %}" class="btn btn-primary" role="button">Take the surveys</a>
+      </div>
+      <div class="col-sm">
+        <a href="{% url 'mobile_guide' %}" class="btn btn-primary" role="button">Read the guidelines</a>
+      </div>
+      <div class="col-sm">
+        <a href="{% url 'datadrop' %}" class="btn btn-primary" role="button">Spotify Data Upload</a>
+      </div>
+    </div>
+
+  </div>
+
+
+{% endblock %}
