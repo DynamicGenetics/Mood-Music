@@ -1,0 +1,11 @@
+{% extends "dashboard/base.html" %}
+
+{% block title %}{% block head_title %}Success{% endblock head_title %}{% endblock title %}
+
+{% block content %}
+    <h2>Success!</h2>
+    <p>Thanks, you have successfully completed this step.</p>
+    
+    <a href="{% url 'dashboard' %}" class="btn btn-primary" role="button">Back to Dashboard</a>
+
+{% endblock content %}
