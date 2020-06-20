@@ -3,10 +3,21 @@ from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
-@login_required
 def dashboard(request):
-    return render(request, 'dashboard.html', {})
+    return render(request, "dashboard/dashboard.html", {})
 
-@login_required
+
 def thanks(request):
-    return render(request, 'thanks.html', {})
+    return render(request, "dashboard/thanks.html", {})
+
+
+def spotify(request):
+    return render(request, "dashboard/spotify-connect.html", {})
+
+
+def datadrop(request):
+    return render(request, "dashboard/data-drop.html", {})
+
+
+def mobile_guide(request):
+    return render(request, "dashboard/mobile-surveys.html", {})
