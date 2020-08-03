@@ -12,7 +12,7 @@ Mood Music
      :alt: Black code style
 
 
-This Django project is being built to manage the participant management and data collection aspects of the Mood Music study.
+This Django project is being built as a participant management and data collection platform the Mood Music study.
 The project will integrate with the Twilio and Spotify APIs to send participant questionnaires via SMS, whilst also collecting
 their authorised Spotify data.
 
@@ -34,25 +34,26 @@ Style
 going up to 119 characters (the length of GitHub's code review). Further advice on code style for Django can be found here_.
 Installing the pre-commit hook that has been set up on the repo will ensure that Python code meets this standard before being pushed.
 
-To install the pre-commit git hook:
-:: :language: bash
+To install the pre-commit git hook::
   pip install pre-commit
+
   pre-commit install
 
 .. _here: https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/
 
 Documentation
 ^^^^^^^^^^^^^^
-Documentation of code is the responsibility of all contributors. Please follow 'numpy conventions'_ for inline documentation, particuarly
-docstrings. Spynx will be used for autogeneration of documentation, so ``.rst`` (reStructuredText_) files are preferred over ``.md``.
+Documentation of code is the responsibility of all contributors. Please follow `NumPy conventions`_ for inline documentation, particuarly
+docstrings.
+Spynx will be used for autogeneration of documentation, so ``.rst`` (reStructuredText_) files are preferred over ``.md``.
 
-.. _numpy conventions: https://numpydoc.readthedocs.io/en/latest/format.html
+.. _NumPy conventions: https://numpydoc.readthedocs.io/en/latest/format.html
 .. _reStructuredText: https://restructuredtext-philosophy.readthedocs.io/en/latest/index.html
 
 Branches
 ^^^^^^^^^
-This project will follow the principles of the GitFlow_, meaning that the main branch is used for releases. To develop any new features
-please use a feature branch with the naming conventions ``feature/name-of-feature``, branched from ``develop``.
+This project will follow the principles of the GitFlow_, meaning that the main branch is only used for stable releases. To develop any new features
+please use a feature branch from ``develop`` with the naming convention ``feature/name-of-feature``.
 
 Please note that ``main`` is a protected branch, and cannot be pushed to without a reviewed pull request from ``develop``.
 
