@@ -34,9 +34,9 @@ Style
 going up to 119 characters (the length of GitHub's code review). Further advice on code style for Django can be found here_.
 Installing the pre-commit hook that has been set up on the repo will ensure that Python code meets this standard before being pushed.
 
-To install the pre-commit git hook::
+To install the pre-commit git hook:
+.. code-block::
   pip install pre-commit
-
   pre-commit install
 
 .. _here: https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/
