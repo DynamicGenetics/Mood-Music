@@ -36,7 +36,7 @@ Installing the pre-commit hook that has been set up on the repo will ensure that
 
 To install the pre-commit git hook
 
-.. code-block::
+.. code-block:: python
   pip install pre-commit
   pre-commit install
 
