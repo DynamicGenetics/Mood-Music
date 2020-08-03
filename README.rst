@@ -1,8 +1,9 @@
 Mood Music
 ==========
 
-Django project to manage the mood music study
-
+.. image:: https://img.shields.io/badge/License-GPLv3-blue.svg
+    :target: https://www.gnu.org/licenses/gpl-3.0
+    :alt: GNU GPLv3 License
 .. image:: https://img.shields.io/badge/built%20with-Cookiecutter%20Django-ff69b4.svg
      :target: https://github.com/pydanny/cookiecutter-django/
      :alt: Built with Cookiecutter Django
@@ -11,99 +12,51 @@ Django project to manage the mood music study
      :alt: Black code style
 
 
-:License: MIT
+This Django project is being built as a participant management and data collection platform the Mood Music study.
+The project will integrate with the Twilio and Spotify APIs to send participant questionnaires via SMS, whilst also collecting
+their authorised Spotify data.
 
 
-Settings
---------
+Dev Guidelines
+---------------
 
-Moved to settings_.
+General logging and recording of tasks will be done through the GitHub project board. Ask @ninadicara if you have any questions.
 
-.. _settings: http://cookiecutter-django.readthedocs.io/en/latest/settings.html
-
-Basic Commands
---------------
-
-Setting Up Your Users
-^^^^^^^^^^^^^^^^^^^^^
-
-* To create a **normal user account**, just go to Sign Up and fill out the form. Once you submit it, you'll see a "Verify Your E-mail Address" page. Go to your console to see a simulated email verification message. Copy the link into your browser. Now the user's email should be verified and ready to go.
-
-* To create an **superuser account**, use this command::
-
-    $ python manage.py createsuperuser
-
-For convenience, you can keep your normal user logged in on Chrome and your superuser logged in on Firefox (or similar), so that you can see how the site behaves for both kinds of users.
-
-Type checks
-^^^^^^^^^^^
-
-Running type checks with mypy:
-
-::
-
-  $ mypy moodmusic
-
-Test coverage
+Requirements
 ^^^^^^^^^^^^^
-
-To run the tests, check your test coverage, and generate an HTML coverage report::
-
-    $ coverage run -m pytest
-    $ coverage html
-    $ open htmlcov/index.html
-
-Running tests with py.test
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-::
-
-  $ pytest
-
-Live reloading and Sass CSS compilation
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Moved to `Live reloading and SASS compilation`_.
-
-.. _`Live reloading and SASS compilation`: http://cookiecutter-django.readthedocs.io/en/latest/live-reloading-and-sass-compilation.html
+The requirements files can be found in ``/requirements``.
+It is the responsibility of contibutors to maintain the requirements file with any new packages.
 
 
+Style
+^^^^^^
+``black`` and ``flake8`` are the preferred Python formatting and style standards for this project, with the exception of line length
+going up to 119 characters (the length of GitHub's code review). Further advice on code style for Django can be found here_.
+Installing the pre-commit hook that has been set up on the repo will ensure that Python code meets this standard before being pushed.
 
+To install the pre-commit git hook use ``pip install pre-commit`` then ``pre-commit install``.
 
-Email Server
-^^^^^^^^^^^^
+.. _here: https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/
 
-In development, it is often nice to be able to see emails that are being sent from your application. If you choose to use `MailHog`_ when generating the project a local SMTP server with a web interface will be available.
+Documentation
+^^^^^^^^^^^^^^
+Documentation of code is the responsibility of all contributors. Please follow `NumPy conventions`_ for inline documentation, particuarly
+docstrings.
+Spynx will be used for autogeneration of documentation, so ``.rst`` (reStructuredText_) files are preferred over ``.md``.
 
-#. `Download the latest MailHog release`_ for your OS.
+.. _NumPy conventions: https://numpydoc.readthedocs.io/en/latest/format.html
+.. _reStructuredText: https://restructuredtext-philosophy.readthedocs.io/en/latest/index.html
 
-#. Rename the build to ``MailHog``.
+Branches
+^^^^^^^^^
+This project will follow the principles of the GitFlow_, meaning that the main branch is only used for stable releases. To develop any new features
+please use a feature branch from ``develop`` with the naming convention ``feature/name-of-feature``.
 
-#. Copy the file to the project root.
+Please note that ``main`` is a protected branch, and cannot be pushed to without a reviewed pull request from ``develop``.
 
-#. Make it executable: ::
+.. _GitFlow: https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow
 
-    $ chmod +x MailHog
-
-#. Spin up another terminal window and start it there: ::
-
-    ./MailHog
-
-#. Check out `<http://127.0.0.1:8025/>`_ to see how it goes.
-
-Now you have your own mail server running locally, ready to receive whatever you send it.
-
-.. _`Download the latest MailHog release`: https://github.com/mailhog/MailHog/releases
-
-.. _mailhog: https://github.com/mailhog/MailHog
-
-
-
-Deployment
-----------
-
-The following details how to deploy this application.
-
-
-
-
+External Contributors
+^^^^^^^^^^^^^^^^^^^^^^
+External contributors are very welcome! Please fork the repo and submit a pull request to ``develop``.
+PRs will be reviewed by @ninadicara and/or @leriomaggio.
