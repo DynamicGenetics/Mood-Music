@@ -1,5 +1,9 @@
 from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
+
+# from django.contrib.auth.decorators import login_required
+
+# Add views that check whether different stages have been completed in order
+# to colour the buttons on the dashboard?
 
 
 # Create your views here.
