@@ -15,9 +15,10 @@ class Track(models.Model):
 
     # Track features (available from user play history call)
     spotify_id = models.CharField(unique=True)
-    name = models.CharField()
+    name = models.CharField(max_length=200, )
     album_name = models.CharField()
-    artists = models.ManyToManyField(Artist, on_delete=models.CASCADE)
+    artists = models.ManyToManyField(Artist, on_delete=models.CASCADE,
+                                     related_name='tracks')
     duration_ms = models.IntegerField()
     popularity = models.IntegerField()
     # Audio analysis features (separate API call)
@@ -42,8 +43,15 @@ class APIPlayHistory(models.Model):
     https://developer.spotify.com/documentation/web-api/reference/player/get-recently-played/
     """
 
-    track = models.ForeignKey(Track)
-    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    track = models.ManyToManyField(Track, through='PlaylistTrack')
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE,
+                             related_name='play_histories')
+
+
+class PlaylistTrack(models.Model):
+    track = models.ForeignKey(Track, on_delete=models.CASCADE)
+    history = models.ForeignKey(APIPlayHistory, related_name='play_histories',
+                                on_delete=models.CASCADE)
     played_at = models.DateTimeField()
 
 
@@ -53,5 +61,6 @@ class RequestPlayHistory(models.Model):
     JSON format with the four fields placed here.
     """
 
-    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE,
+                             related_name='uploaded_history')
     full_history = JSONField()
