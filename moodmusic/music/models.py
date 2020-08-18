@@ -5,6 +5,7 @@ from django.db import models
 
 class Artist(models.Model):
     name = models.CharField()
+    uri = models.CharField()
 
 
 class Track(models.Model):
@@ -14,13 +15,13 @@ class Track(models.Model):
     """
 
     # Track features (available from user play history call)
-    spotify_id = models.CharField(unique=True)
-    name = models.CharField(max_length=200, )
+    uri = models.CharField(unique=True)
+    name = models.CharField(max_length=200,)
     album_name = models.CharField()
-    artists = models.ManyToManyField(Artist, on_delete=models.CASCADE,
-                                     related_name='tracks')
     duration_ms = models.IntegerField()
-    popularity = models.IntegerField()
+    artists = models.ManyToManyField(
+        Artist, on_delete=models.CASCADE, related_name="tracks"
+    )
     # Audio analysis features (separate API call)
     danceability = models.FloatField()
     energy = models.FloatField()
@@ -37,30 +38,42 @@ class Track(models.Model):
     track_href = models.CharField()
 
 
-class APIPlayHistory(models.Model):
+class UserHistory(models.Model):
     """
-
+    Model to record a users played tracks, as obtained by calls to the
+    'user-recently-played' endpoint.
     https://developer.spotify.com/documentation/web-api/reference/player/get-recently-played/
     """
 
-    track = models.ManyToManyField(Track, through='PlaylistTrack')
-    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE,
-                             related_name='play_histories')
+    tracks = models.ManyToManyField(Track, through="TrackHistory")
+    user = models.ForeignKey(
+        get_user_model(), on_delete=models.CASCADE, related_name="play_histories"
+    )
 
 
-class PlaylistTrack(models.Model):
+class TrackHistory(models.Model):
+    """Intermediate model that governs the many-to-many relationship between
+    tracks and play histories by adding information about the time they were played.
+
+    Popularity is also added to this relationship, because the popularity of a track
+    has the potential to change over time.
+    """
+
     track = models.ForeignKey(Track, on_delete=models.CASCADE)
-    history = models.ForeignKey(APIPlayHistory, related_name='play_histories',
-                                on_delete=models.CASCADE)
+    history = models.ForeignKey(
+        UserHistory, related_name="play_histories", on_delete=models.CASCADE
+    )
     played_at = models.DateTimeField()
+    popularity = models.IntegerField()
 
 
-class RequestPlayHistory(models.Model):
+class FullUserHistory(models.Model):
     """This table will hold the data submitted by the user at the end of
     the experiment that is sent to them by Spotify. It will be sent in
     JSON format with the four fields placed here.
     """
 
-    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE,
-                             related_name='uploaded_history')
+    user = models.ForeignKey(
+        get_user_model(), on_delete=models.CASCADE, related_name="uploaded_history"
+    )
     full_history = JSONField()
