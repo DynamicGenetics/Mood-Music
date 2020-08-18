@@ -2,6 +2,7 @@
 .vscode/
 .idea
 example-data/
+secrets.py
 
 
 ### Python template
