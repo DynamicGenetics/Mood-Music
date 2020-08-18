@@ -66,6 +66,7 @@ DJANGO_APPS = [
     "django.contrib.admin",
     "django.forms",
 ]
+
 THIRD_PARTY_APPS = [
     "crispy_forms",
     "allauth",
@@ -74,6 +75,7 @@ THIRD_PARTY_APPS = [
     "bootstrapform",
     "survey",
     "social_django",
+    "django_extensions",
 ]
 
 LOCAL_APPS = [

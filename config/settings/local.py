@@ -51,10 +51,11 @@ DEBUG_TOOLBAR_CONFIG = {
 INTERNAL_IPS = ["127.0.0.1", "10.0.2.2"]
 
 
-# django-extensions
-# ------------------------------------------------------------------------------
-# https://django-extensions.readthedocs.io/en/latest/installation_instructions.html#configuration
-INSTALLED_APPS += ["django_extensions"]  # noqa F405
+# ND: 18.08.2020 Removed this because I need Django Extensions to run my standalone scripts
+# # django-extensions
+# # ------------------------------------------------------------------------------
+# # https://django-extensions.readthedocs.io/en/latest/installation_instructions.html#configuration
+# INSTALLED_APPS += ["django_extensions"]  # noqa F405
 
 # Your stuff...
 # ------------------------------------------------------------------------------
