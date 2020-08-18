@@ -55,7 +55,7 @@ class Question(models.Model):
 
     # Max length of a SMS message is 160 chars
     body = models.CharField(max_length=160)
-    survey = models.ForeignKey(Survey)
+    survey = models.ForeignKey(Survey, on_delete=models.CASCADE)
 
     def next(self):
         """Returns the next question in the survey, if there is one"""
@@ -74,7 +74,7 @@ class QuestionResponse(models.Model):
     response = models.IntegerField()
     call_sid = models.CharField(max_length=255)
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
-    question = models.ForeignKey(Question)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
 
     def __str__(self):
         return "%s" % self.response
@@ -89,12 +89,16 @@ class QuestionResponse(models.Model):
 
 class Assessment(models.Model):
     """"""
-    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE,
-                             related_name='generated_links')
-    url = models.CharField(max_length=20, verbose_name='URL ID',
-                           primary_key=True, unique=True)
-    valid_until = models.DateTimeField(auto_now_add=False, auto_now=False,
-                                       editable=False)
+
+    user = models.ForeignKey(
+        get_user_model(), on_delete=models.CASCADE, related_name="generated_links"
+    )
+    url = models.CharField(
+        max_length=20, verbose_name="URL ID", primary_key=True, unique=True
+    )
+    valid_until = models.DateTimeField(
+        auto_now_add=False, auto_now=False, editable=False
+    )
 
     def save(self, *args, **kwargs):
         url = str(self.user.id) + str(datetime.now()) + str(randint(0, 256))
@@ -103,14 +107,15 @@ class Assessment(models.Model):
         super(Assessment, self).save(*args, **kwargs)
 
 
-
 class EMAQuestion(models.Model):
-    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE,
-                             related_name='ema_questions')
-    happiness = models.PositiveSmallIntegerField(verbose_name='Happiness',
-                                                 validators=[MaxValueValidator(10)])
-    energy = models.PositiveSmallIntegerField(verbose_name='Energy',
-                                              validators=[MaxValueValidator(10)])
-    created_at = models.DateTimeField(auto_now=False, auto_now_add=True,
-                                      editable=False)
+    user = models.ForeignKey(
+        get_user_model(), on_delete=models.CASCADE, related_name="ema_questions"
+    )
+    happiness = models.PositiveSmallIntegerField(
+        verbose_name="Happiness", validators=[MaxValueValidator(10)]
+    )
+    energy = models.PositiveSmallIntegerField(
+        verbose_name="Energy", validators=[MaxValueValidator(10)]
+    )
+    created_at = models.DateTimeField(auto_now=False, auto_now_add=True, editable=False)
 

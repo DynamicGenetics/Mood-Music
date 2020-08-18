@@ -4,8 +4,8 @@ from django.db import models
 
 
 class Artist(models.Model):
-    name = models.CharField()
-    uri = models.CharField()
+    name = models.CharField(max_length=255)
+    uri = models.CharField(max_length=120)
 
 
 class Track(models.Model):
@@ -15,13 +15,11 @@ class Track(models.Model):
     """
 
     # Track features (available from user play history call)
-    uri = models.CharField(unique=True)
-    name = models.CharField(max_length=200,)
-    album_name = models.CharField()
+    uri = models.CharField(unique=True, max_length=120)
+    name = models.CharField(max_length=255)
+    album_name = models.CharField(max_length=255)
     duration_ms = models.IntegerField()
-    artists = models.ManyToManyField(
-        Artist, on_delete=models.CASCADE, related_name="tracks"
-    )
+    artists = models.ManyToManyField(Artist, related_name="tracks")
     # Audio analysis features (separate API call)
     danceability = models.FloatField()
     energy = models.FloatField()
@@ -35,7 +33,7 @@ class Track(models.Model):
     valence = models.FloatField()
     tempo = models.FloatField()
     time_signature = models.IntegerField()
-    track_href = models.CharField()
+    track_href = models.CharField(max_length=255)
 
 
 class UserHistory(models.Model):
