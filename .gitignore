@@ -3,7 +3,7 @@
 .idea
 example-data/
 secrets.py
-
+.cache-ninaheather
 
 ### Python template
 # Byte-compiled / optimized / DLL files
