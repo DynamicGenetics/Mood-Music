@@ -1,6 +1,7 @@
-from django.shortcuts import render, render_to_response
 from .models import Assessment
 from .forms import EMAQuestionForm
+
+from django.shortcuts import render, render_to_response
 
 
 # Create your views here.
@@ -13,10 +14,10 @@ def setup_sms(request):
 
 
 def ema_question(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         form = EMAQuestionForm(data=request.POST)
         form.save()
-        return render_to_response('')  ## TBD
+        return render_to_response("")  # TBD
     else:  # GET
         form = EMAQuestionForm()
-        return render_to_response('ema_question.html', {'form': form})
+        return render_to_response("ema_question.html", {"form": form})
