@@ -7,6 +7,14 @@ from .models import Artist, Track, UserHistory
 from .secrets import CLIENT_ID, CLIENT_SECRET
 
 
+def get_user_histories():
+    users = get_user_model().objects.all()
+
+    for user in users:
+        history = get_recent_history(user)
+        save_recent_history(history, user)
+
+
 def get_recent_history(user: get_user_model()) -> dict:
     """For a given user, gets their recent play history from the
     Spotify API.
@@ -80,3 +88,7 @@ def save_recent_history(history: dict, user: get_user_model()):
                 "popularity": item["track"]["popularity"],
             },
         )
+
+
+if __name__ == "__main__":
+    get_user_histories()
