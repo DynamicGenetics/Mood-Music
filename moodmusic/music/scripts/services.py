@@ -1,10 +1,10 @@
+import os
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 from django.contrib.auth import get_user_model
 from social_django.models import UserSocialAuth
 
 from ..models import Artist, Track, UserHistory
-from ..secrets import CLIENT_ID, CLIENT_SECRET
 
 
 def run():
@@ -37,8 +37,8 @@ def get_recent_history(user: get_user_model()) -> dict:
     sp = spotipy.Spotify(
         auth_manager=SpotifyOAuth(
             scope="user-read-recently-played",
-            client_id=CLIENT_ID,
-            client_secret=CLIENT_SECRET,
+            client_id=os.environ["SPOTIFY_CLIENT_ID"],
+            client_secret=os.environ["SPOTIFY_CLIENT_SECRET"],
             redirect_uri="http://127.0.0.1:8000/",
             username=user_uid,
         )
