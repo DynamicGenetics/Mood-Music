@@ -76,6 +76,7 @@ THIRD_PARTY_APPS = [
     "survey",
     "social_django",
     "django_extensions",
+    "phonenumber_field",
 ]
 
 LOCAL_APPS = [
