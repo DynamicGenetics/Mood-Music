@@ -1,3 +1,8 @@
+env:
+  POSTGRES_PASSWORD: postgres
+  POSTGRES_USER: postgres
+  POSTGRES_HOST: localhost
+
 name: Integration Testing
 
 on:
@@ -35,27 +40,34 @@ jobs:
           --health-timeout 5s
           --health-retries 5
         ports:
-          - 5432:5432
-        # needed because the postgres container does not provide a healthcheck
+          - '5432:5432'
 
     steps:
     - uses: actions/checkout@v2
+
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
+
+    - name: Install and Start Postgres
+      run: |
+        sudo apt-get install postgresql libpq-dev
+        sudo service postgresql start
+
     - name: Install Dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements/local.txt
+
     - name: Database Migrations
       run: python manage.py migrate
       env:
         SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
         SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_SECRET_ID }}
+
     - name: Run Tests
       run: |
-        python manage.py runserver
         pytest
       env:
         SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
