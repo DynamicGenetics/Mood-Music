@@ -28,8 +28,6 @@ jobs:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: postgres
-          SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
-          SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_SECRET_ID }}
         ports:
           - 5432:5432
         # needed because the postgres container does not provide a healthcheck
@@ -47,6 +45,9 @@ jobs:
         pip install -r requirements/local.txt
     - name: Database Migrations
       run: python manage.py migrate
+      env:
+        SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
+        SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_SECRET_ID }}
     - name: Run Tests
       run: |
         pytest
