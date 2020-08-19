@@ -18,7 +18,7 @@ flake8==3.8.1  # https://github.com/PyCQA/flake8
 coverage==5.1  # https://github.com/nedbat/coveragepy
 black==19.10b0  # https://github.com/ambv/black
 pylint-django==2.0.15  # https://github.com/PyCQA/pylint-django
-pre-commit==2.4.0  # https://github.com/pre-commit/pre-commit
+pre-commit==2.6.0  # https://github.com/pre-commit/pre-commit
 
 # Django
 # ------------------------------------------------------------------------------
