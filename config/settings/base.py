@@ -1,10 +1,11 @@
 """
 Base settings to build other settings files upon.
 """
-from pathlib import Path
 
-import environ
 import os
+import environ
+
+from pathlib import Path
 
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 # moodmusic/
@@ -65,6 +66,7 @@ DJANGO_APPS = [
     "django.contrib.admin",
     "django.forms",
 ]
+
 THIRD_PARTY_APPS = [
     "crispy_forms",
     "allauth",
@@ -73,11 +75,15 @@ THIRD_PARTY_APPS = [
     "bootstrapform",
     "survey",
     "social_django",
+    "django_extensions",
+    "phonenumber_field",
 ]
 
 LOCAL_APPS = [
     "moodmusic.users.apps.UsersConfig",
     "moodmusic.dashboard.apps.DashboardConfig",
+    "moodmusic.ema.apps.EmaConfig",
+    "moodmusic.music.apps.MusicConfig"
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -261,7 +267,6 @@ LOGGING = {
     "root": {"level": "INFO", "handlers": ["console"]},
 }
 
-
 # django-allauth
 # ------------------------------------------------------------------------------
 ACCOUNT_ALLOW_REGISTRATION = env.bool("DJANGO_ACCOUNT_ALLOW_REGISTRATION", True)
@@ -275,7 +280,6 @@ ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_ADAPTER = "moodmusic.users.adapters.AccountAdapter"
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 SOCIALACCOUNT_ADAPTER = "moodmusic.users.adapters.SocialAccountAdapter"
-
 
 # Social Django App Settings
 # ------------------------------------------------------------------------------
@@ -302,4 +306,3 @@ SOCIAL_AUTH_PIPELINE = (
 SOCIAL_AUTH_SPOTIFY_KEY = "6408ea155e2e4422997d55379a1001a2"
 SOCIAL_AUTH_SPOTIFY_SECRET = os.environ["SPOTIFY_CLIENT_SECRET"]
 SOCIAL_AUTH_SPOTIFY_SCOPE = ["user-read-recently-played", "user-library-read"]
-
