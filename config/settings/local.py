@@ -59,3 +59,15 @@ INTERNAL_IPS = ["127.0.0.1", "10.0.2.2"]
 
 # Your stuff...
 # ------------------------------------------------------------------------------
+# To make this work with GitHub Actions it needs to be able to make a dummy database
+if os.environ.get("GITHUB_WORKFLOW"):
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": "github_actions",
+            "USER": "postgres",
+            "PASSWORD": "postgres",
+            "HOST": "127.0.0.1",
+            "PORT": "5432",
+        }
+    }

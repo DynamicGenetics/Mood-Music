@@ -52,7 +52,6 @@ jobs:
 
     - name: Install and Start Postgres
       run: |
-        sudo apt-get install postgresql libpq-dev
         sudo service postgresql start
 
     - name: Install Dependencies
