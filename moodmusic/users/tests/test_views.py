@@ -69,7 +69,7 @@ class TestUserDetailView:
         response = user_detail_view(request, username=user.username)
 
         assert response.status_code == 302
-        assert response.url == "/accounts/login/?next=/fake-url/"
+        assert response.url == "/login/?next=/fake-url/"
 
     def test_case_sensitivity(self, rf: RequestFactory):
         request = rf.get("/fake-url/")
