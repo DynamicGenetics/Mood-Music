@@ -17,9 +17,11 @@ django-redis==4.11.0  # https://github.com/jazzband/django-redis
 
 # Third Party Apps for EMA and Music modules
 # ------------------------------------------------------------------------------
-django-survey-and-report==1.3.21 # https://github.com/Pierre-Sassoulas/django-survey
+# git+git://github.com/mehcode/python-xml/v1.3.8 # This is a requirement for survey and report
+# causes problems if installed via pip
+django-survey-and-report # https://github.com/Pierre-Sassoulas/django-survey
 social-auth-app-django==3.1.0 # https://github.com/python-social-auth/social-app-django
-social-auth-core[all]==2.0.0
+social-auth-core[openidconnect]==2.0.0
 spotipy==2.13.0
 django-phonenumber-field==5.0.0
 phonenumbers==8.12.8
