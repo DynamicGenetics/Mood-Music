@@ -3,7 +3,7 @@ name: Integration Testing
 on:
   push:
     branches:
-    - '**' # Runs workflow everyone time code is pushed to repo
+    - 'feature/**' # Runs workflow everyone time code is pushed to repo
     paths-ignore:
     - 'docs/**' # Will not run for anything pushed to docs
   pull_request:
@@ -21,6 +21,18 @@ jobs:
       matrix:
         python-version: [3.8]
 
+    services:
+      postgres: 
+        image: postgres:12.3
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        # needed because the postgres container does not provide a healthcheck
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
@@ -31,6 +43,8 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements/local.txt
+    - name: Database Migrations
+      run: python manage.py migrate
     - name: Run Tests
       run: |
         pytest
