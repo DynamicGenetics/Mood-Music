@@ -3,7 +3,6 @@ from django.contrib.auth import get_user_model
 
 
 class EMAQuestions(models.Model):
-    unique_id = models.IntegerField(primary_key=True)
     short_name = models.CharField(max_length=50)
     question = models.CharField(
         max_length=160
@@ -19,8 +18,7 @@ class EMASession(models.Model):
         The time and date that this session was initiated
     """
 
-    session_id = models.IntegerField()
-    start_time = models.DateTimeField()
+    start_time = models.DateTimeField(auto_now_add=True)
 
     @property
     def day_of_study():
@@ -28,7 +26,6 @@ class EMASession(models.Model):
         EMA session is.
         """
         # TODO Work out how to figure this out.
-        return
 
 
 class SessionState(models.Model):
@@ -42,11 +39,11 @@ class SessionState(models.Model):
     """
 
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
-    session_no = models.ForeignKey(EMASession, on_delete=models.CASCADE)
+    session = models.ForeignKey(EMASession, on_delete=models.CASCADE)
     state = models.PositiveSmallIntegerField()
     started_at = models.DateTimeField()
 
-    def get_current_state():
+    def current(user):
         """Find and return a user's current state.
         """
 
