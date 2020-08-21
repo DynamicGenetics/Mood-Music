@@ -1,23 +1,16 @@
-from .models import Assessment
-from .forms import EMAQuestionForm
+from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
 
-from django.shortcuts import render, render_to_response
-
-
-# Create your views here.
-
-# TODO: figure out how to link the user
-def setup_sms(request):
-    # aspasas
-    assessment = Assessment(user=request.user)
-    assessment.save()
+from twilio.twiml.messaging_response import MessagingResponse
 
 
-def ema_question(request):
-    if request.method == "POST":
-        form = EMAQuestionForm(data=request.POST)
-        form.save()
-        return render_to_response("")  # TBD
-    else:  # GET
-        form = EMAQuestionForm()
-        return render_to_response("ema_question.html", {"form": form})
+@csrf_exempt
+def respond_to_incoming_message(request):
+    """Responds to a text message to the Twilio number with a predefined message"""
+    # Start response
+    resp = MessagingResponse()
+
+    # Add a text message to the response
+    resp.message("Check out this cute owl! https://bit.ly/3i3ru4p")
+
+    return HttpResponse(str(resp))
