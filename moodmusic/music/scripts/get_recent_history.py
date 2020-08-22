@@ -29,27 +29,28 @@ class CustomAuthManager:
         self.auth_info = UserSocialAuth.objects.get(user=user).extra_data
 
     @property
-    def current_token(self):
+    def access_token(self):
         return self._current_token
 
-    @current_token.setter
-    def current_token(self):
+    @access_token.setter
+    def access_token(self, user):
         now = timezone.now()
 
-        current_auth_info = self.auth_info["access_token"]
+        recorded_token = self.auth_info["access_token"]
         # if no token or token about to expire soon
-        if (
-            not self.current_token
-            or self.current_token["expires_at"] > now.timestamp() + 60
-        ):
-            self.current_token = self.auth.refresh_access_token(
+        if not recorded_token or self.auth_info["expires_at"] > now.timestamp() + 60:
+            new_auth_info = self.auth.refresh_access_token(
                 self.auth_info["refresh_token"]
             )
 
-        return self.current_token["access_token"]
+        UserSocialAuth.objects.get(user=user).extra_data = new_auth_info
+
+        self._current_token = new_auth_info["access_token"]
+
+        return self._current_token["access_token"]
 
 
-spotify = spotipy.Spotify(auth_manager=CustomAuthManager(keys))
+spotify = spotipy.Spotify(auth_manager=CustomAuthManager(user))
 
 
 def save_recent_history(sp: spotipy.Spotify, user: get_user_model()):
