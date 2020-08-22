@@ -1,8 +1,11 @@
 import os
 import spotipy
 
+
 from spotipy.oauth2 import SpotifyOAuth
 from django.contrib.auth import get_user_model
+from django.utils import timezone
+from datetime import timestamp
 from social_django.models import UserSocialAuth
 
 from ..models import Artist, Track, UserHistory
@@ -13,6 +16,40 @@ def run():
 
     for user in users:
         save_recent_history(user)
+
+
+# This is adapted from https://github.com/plamere/spotipy/issues/555
+class CustomAuthManager:
+    def __init__(self, user):
+        self.auth = SpotifyOAuth(
+            client_id=os.environ["SPOTIFY_CLIENT_ID"],
+            client_secret=os.environ["SPOTIFY_CLIENT_SECRET"],
+            redirect_uri="http://127.0.0.1:8000/",
+        )
+        self.auth_info = UserSocialAuth.objects.get(user=user).extra_data
+
+    @property
+    def current_token(self):
+        return self._current_token
+
+    @current_token.setter
+    def current_token(self):
+        now = timezone.now()
+
+        current_auth_info = self.auth_info["access_token"]
+        # if no token or token about to expire soon
+        if (
+            not self.current_token
+            or self.current_token["expires_at"] > now.timestamp() + 60
+        ):
+            self.current_token = self.auth.refresh_access_token(
+                self.auth_info["refresh_token"]
+            )
+
+        return self.current_token["access_token"]
+
+
+spotify = spotipy.Spotify(auth_manager=CustomAuthManager(keys))
 
 
 def save_recent_history(sp: spotipy.Spotify, user: get_user_model()):
@@ -26,7 +63,17 @@ def save_recent_history(sp: spotipy.Spotify, user: get_user_model()):
     """
 
     # Get the user's authentication token
-    user_auth = UserSocialAuth.objects.get(user=user).extra_data["access_token"]
+    try:
+        user_auth = UserSocialAuth.objects.get(user=user).extra_data["access_token"]
+        sp = spotipy.Spotify(auth=user_auth)
+    except spotipy.exceptions.SpotifyException:
+        sp = SpotifyOAuth(
+            client_id=os.environ["SPOTIFY_CLIENT_ID"],
+            client_secret=os.environ["SPOTIFY_CLIENT_SECRET"],
+            scope="user-read-recently-played",
+            redirect_uri="http://127.0.0.1:8000/",
+        )
+
     sp = spotipy.Spotify(auth=user_auth)
 
     # Get the user's recent history as a json object
