@@ -10,8 +10,8 @@ from twilio.twiml.messaging_response import MessagingResponse
 from twilio.rest import Client
 
 from .decorators import validate_twilio_request
-from ..services import manage_response
-from ..models import EMASession, SessionState, EMAQuestions
+from moodmusic.ema.services import manage_response
+from moodmusic.ema.models import EMASession, SessionState, EMAQuestions
 
 
 @csrf_exempt
