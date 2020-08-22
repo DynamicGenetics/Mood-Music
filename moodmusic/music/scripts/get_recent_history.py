@@ -1,5 +1,6 @@
 import os
 import spotipy
+
 from spotipy.oauth2 import SpotifyOAuth
 from django.contrib.auth import get_user_model
 from social_django.models import UserSocialAuth
@@ -11,40 +12,7 @@ def run():
     users = get_user_model().objects.all()
 
     for user in users:
-        spotify_obj = get_recent_history(user)
-        save_recent_history(spotify_obj, user)
-
-
-def get_recent_history(user: get_user_model()) -> dict:
-    """For a given user, gets their recent play history from the
-    Spotify API.
-
-    Parameters
-    ----------
-    user : User
-        A Django User object
-
-    Returns
-    -------
-    dict
-        A json object containing recently played songs. The format of
-        this object can be found
-        [here](https://developer.spotify.com/documentation/web-api/reference/player/get-recently-played/).
-    """
-    # Get this user's social app username from the UserSocialAuth table
-    user_uid = UserSocialAuth.objects.get(user=user).uid
-
-    sp = spotipy.Spotify(
-        auth_manager=SpotifyOAuth(
-            scope="user-read-recently-played",
-            client_id=os.environ["SPOTIFY_CLIENT_ID"],
-            client_secret=os.environ["SPOTIFY_CLIENT_SECRET"],
-            redirect_uri="http://127.0.0.1:8000/",
-            username=user_uid,
-        )
-    )
-
-    return sp
+        save_recent_history(user)
 
 
 def save_recent_history(sp: spotipy.Spotify, user: get_user_model()):
@@ -53,13 +21,15 @@ def save_recent_history(sp: spotipy.Spotify, user: get_user_model()):
 
     Parameters
     ----------
-    history : dict
-        A json object containing recently played songs.
     user: User
         A Django User object
     """
 
-    # Get the users recent history as a json object
+    # Get the user's authentication token
+    user_auth = UserSocialAuth.objects.get(user=user).extra_data["access_token"]
+    sp = spotipy.Spotify(auth=user_auth)
+
+    # Get the user's recent history as a json object
     history = sp.current_user_recently_played()
 
     # Initiate the UserHistory object for the user
