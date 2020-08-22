@@ -53,12 +53,18 @@ class SessionState(models.Model):
 
     def get_next_question(self):
         # If they have answered less than than number of questions available
-        if EMAResponse(self).questions_answered < EMAQuestions.objects.all().count():
+        if (
+            EMAResponse.objects.filter(state=self).count()
+            < EMAQuestions.objects.all().count()
+        ):
             all_qs = EMAQuestions.objects.all()
-            answered_qs = self.questions_asked
+            answered_qs = self.questions_asked.all()
             # Get the remaining available questions and choose one.
             remaining = all_qs.difference(answered_qs)
-            return random.choice(remaining)
+            try:
+                random.choice(remaining)
+            except IndexError:
+                return None
         else:
             return None
 
@@ -99,7 +105,3 @@ class EMAResponse(models.Model):
     )
     response = models.PositiveSmallIntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
-
-    @classmethod
-    def questions_answered(cls, state):
-        return cls.objects.filter(state=state).count()

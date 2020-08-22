@@ -1,5 +1,6 @@
 import os
 import random
+import logging
 
 from django.http import HttpResponse
 from django.utils import timezone
@@ -13,6 +14,9 @@ from .decorators import validate_twilio_request
 from moodmusic.ema.services import manage_response
 from moodmusic.ema.models import EMASession, SessionState, EMAQuestions
 
+# Retieve or create a logger instance
+logger = logging.getLogger(__name__)
+
 
 @csrf_exempt
 @validate_twilio_request
@@ -23,7 +27,11 @@ def respond_to_incoming_message(request):
     number = request.POST.get("From")
     text = request.POST.get("Body")
     receieved = timezone.now()
-
+    logger.info(
+        "Message receieve. Number: {}, Message: {}, Time: {}".format(
+            number, text, receieved
+        )
+    )
     # If a user can be associated with this number then...
     try:
         user = get_user_model().objects.filter(phone_number=number).exists()
@@ -32,6 +40,11 @@ def respond_to_incoming_message(request):
     except get_user_model().DoesNotExist:
         # Work out how to tell Twilio we don't want to reply
         reply = "User not recognised"
+        logger.info(
+            "Message from unrecognised number. Number: {}, Message: {}, Time: {}".format(
+                number, text, receieved
+            )
+        )
 
     # Start response
     resp = MessagingResponse()
@@ -61,12 +74,14 @@ def start_survey_session(request):
 
     for user in users:
         # Send message
+
         client.messages.create(
-            to=user.phone_number, from_=os.environ["TWILIO_NUMBER"], body=message
+            to=user.phone_number.as_e164,
+            from_=os.environ["TWILIO_NUMBER"],
+            body=message,
         )
         # Initialise the user's state for this new session
-        SessionState.objects.create(
-            user=user, session=session, questions_asked=question
-        )
+        s = SessionState.objects.create(user=user, session=session)
+        s.questions_asked.add(question)
 
     return HttpResponse("Messages successfully sent!", 200)

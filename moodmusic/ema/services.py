@@ -9,7 +9,7 @@ from .models import EMASession, EMAResponse, SessionState, QuestionHistory
 
 AUTO_MESSAGE = {
     "no_active_session": """There is not a survey running at the moment.
-     We will message you the next time that we have questions for you.""",
+    We will message you the next time that we have questions for you.""",
     "message_invalid": """Sorry, we can only recieve messages that contains a number
     from 0 to 10 with no punctuation. Please send your response again. """,
     "thanks": """Thank you! You have completed the survey and there are no
@@ -35,11 +35,14 @@ def manage_response(user: get_user_model(), text: str, recieved: datetime) -> st
     str
         An appropriate response message to the User
     """
-    latest_session = EMASession.objects.latest("start_time")
+    try:
+        latest_session = EMASession.objects.latest("start_time")
+    except EMASession.DoesNotExist:
+        return AUTO_MESSAGE["no_active_session"]
 
     # Find out if a session is active by seeing if one was started in the last hour
     if latest_session.is_active:
-        state = SessionState.objects.filter(user=user, session=latest_session)
+        state = SessionState.objects.get(user=user, session=latest_session)
     else:
         return AUTO_MESSAGE["no_active_session"]
 
@@ -81,6 +84,6 @@ def save_response(text: str, state: SessionState):
     last question asked as an EMARepsonse instance.
     """
     # Save response to database
-    EMAResponse.create(
+    EMAResponse.objects.create(
         state=state, question=QuestionHistory.last_question(state), response=int(text),
     )
