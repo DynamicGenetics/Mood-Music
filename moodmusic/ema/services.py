@@ -1,30 +1,30 @@
 """
 Module to that provides utility and routing functions for EMA survey sms messaging.
 """
-from django.utils import timezone
 from django.contrib.auth import get_user_model
-from datetime import datetime, timedelta
+from datetime import datetime
 
-from .models import EMASession, EMAResponse, SessionState
+from .models import EMASession, EMAResponse, SessionState, QuestionHistory
 
 
 AUTO_MESSAGE = {
-    "no_active_session": """Sorry, the last survey period has now expired.
-    We'll message you the next time we have questions for you to complete.""",
+    "no_active_session": """There is not a survey running at the moment.
+     We will message you the next time that we have questions for you.""",
     "message_invalid": """Sorry, we can only recieve messages that contains a number
     from 0 to 10 with no punctuation. Please send your response again. """,
-    "thanks": """Thank you! You have completed the survey.""",
+    "thanks": """Thank you! You have completed the survey and there are no
+    more questions for you to answer.""",
 }
 
 
-def manage_response(number: str, text: str, recieved: datetime) -> str:
+def manage_response(user: get_user_model(), text: str, recieved: datetime) -> str:
     """Function to manage routing for incoming text messages by providing the
     correct response for the user and saving their response if it is accepted.
 
     Parameters
     ----------
-    number: str
-        User's phone number
+    user: User Model
+        User that matched the phone number
     text: str
         Body of the recieved message.
     recieved: datetime
@@ -35,42 +35,38 @@ def manage_response(number: str, text: str, recieved: datetime) -> str:
     str
         An appropriate response message to the User
     """
-
-    user = get_user_model().objects.filter(phone_number=number)
+    latest_session = EMASession.objects.latest("start_time")
 
     # Find out if a session is active by seeing if one was started in the last hour
-    now = timezone.now()
-    one_hour_ago = now - timedelta(minutes=60)
-    try:
-        session = EMASession.objects.filter(
-            start_time__range=[now, one_hour_ago]
-        ).latest("start_time")
-        state = SessionState.objects.filter(user=user, session=session)
-    except EMASession.DoesNotExist:
+    if latest_session.is_active:
+        state = SessionState.objects.filter(user=user, session=latest_session)
+    else:
         return AUTO_MESSAGE["no_active_session"]
 
-    # Assuming the above was successful, save the response and get the next message unless invalid
-    # Strip any spaces or punctuation from the message and then check if it is valid
+    # Strip any spaces or punctuation from the message and see if there are any more
+    # questions
     text = "".join(e for e in text if e.isalnum())
-    if is_valid(text):
-        save_response(text, state)
-        return next_message(state)
-    else:
+    next_message = state.get_next_question()
+
+    # Main reply logic sequence
+    if next_message is None:
+        # There is no next message, so just say thanks
+        return AUTO_MESSAGE["thanks"]
+    elif (next_message is not None) and (is_valid(text) is False):
+        # There is a next message, but the text is invalid, so ask again
         return AUTO_MESSAGE["message_invalid"]
+    else:
+        # Assuming this means the response is valid...
+        # Save the response to the db
+        save_response(text, state)
+        # Update the state and record the last question asked
+        state.update(next_message)
+        # Return the string of text for the next question
+        return next_message.body
 
 
 def is_valid(text: str):
     """Ensures the text only contains a number between 0 and 10
-
-    Parameters
-    ----------
-    text: str
-        Recieved message text body
-
-    Returns
-    -------
-    bool
-        True if message is valid, False otherwise
     """
     accepted_responses = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
 
@@ -81,41 +77,10 @@ def is_valid(text: str):
 
 
 def save_response(text: str, state: SessionState):
-
-    # Save response
-    EMAResponse.create(
-        session_no=state.session,
-        question=state.last_question_sent,
-        user=state.user,
-        response=int(text),
-    )
-
-    # Update questions answered in the user's session state
-    # state.questions_answered = state.questions_answered + 1
-
-
-def next_message(state: SessionState):
-    """Given the state of a
-
-    Parameters
-    ----------
-    state : SessionState
-        [description]
+    """Given some text will save it as the response to the
+    last question asked as an EMARepsonse instance.
     """
-    question = "hi again"
-
-    return question
-
-
-#     # If they have answered as many questions as are in the database...
-#     if state.messages_sent > EMAQuestions.objects.count()
-
-#     if (state.questions_answered == EMAQuestions.objects.count()) :
-
-#     elif state.questions_answered  .count():
-
-# If the state.questions answered == number of quesiotns in EMAQuestions then send 'thank you'
-# If the state.messages_sent
-# Get the questions that have been answered in this session from EMAResponses
-# Get the available questions in EMAQuestions
-# Randomly pick a question from the remaining questions
+    # Save response to database
+    EMAResponse.create(
+        state=state, question=QuestionHistory.last_question(state), response=int(text),
+    )

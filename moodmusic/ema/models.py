@@ -1,3 +1,5 @@
+import random
+
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.utils import timezone
@@ -11,14 +13,11 @@ class EMAQuestions(models.Model):
 class EMASession(models.Model):
     """Data about the EMA session.
 
-    session_id: int
-        Cumulative session number since study start
     start_time: datetime
         The time and date that this session was initiated
     """
 
     start_time = models.DateTimeField(auto_now_add=True)
-    first_question = models.ForeignKey(EMAQuestions, on_delete=models.CASCADE)
 
     @property
     def is_active(self):
@@ -37,36 +36,70 @@ class SessionState(models.Model):
     """Data about the user's current state in the EMA survey session. There is
     one instance per user per survey session which is updated as they reply.
 
-    questions_answered: int
-        The number of questions the user has successfully answered, starting from 0
-        from point of first question being sent.
-    questions_sent: int
-        The number of questions the user has been sent, starting from 1 at the point
-        the first message is sent.
+    state: int
+        Proxy value for the number of replies recieved. Number of messages sent
+        by the application is always assumed to be state + 1.
+    questions_asked: EMAQuestion
+        The questions the user has been sent.
     last_updated: datetime
         The date and time that this state was last changed.
-    last_question_sent: EMAQuestions
-        The last question that is recording as having been sent to the user.
+    last_question: EMAQuestions
+        The last question that has been sent to the user.
     """
 
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     session = models.ForeignKey(EMASession, on_delete=models.CASCADE)
-    messages_sent = models.PositiveSmallIntegerField(default=1)
-    questions_answered = models.PositiveSmallIntegerField(default=0)
-    last_question_sent = models.ForeignKey(EMAQuestions, on_delete=models.CASCADE)
-    last_updated = models.DateTimeField(auto_now=True)
+    questions_asked = models.ManyToManyField(EMAQuestions, through="QuestionHistory")
 
-    def get_next_message(self):
-        if self.messages_sent > EMAQuestions.objects.count():
+    def get_next_question(self):
+        # If they have answered less than than number of questions available
+        if EMAResponse(self).questions_answered < EMAQuestions.objects.all().count():
+            all_qs = EMAQuestions.objects.all()
+            answered_qs = self.questions_asked
+            # Get the remaining available questions and choose one.
+            remaining = all_qs.difference(answered_qs)
+            return random.choice(remaining)
+        else:
+            return None
 
-            return
+    def update(self, next_message):
+        self.questions_asked.add(
+            next_message, through_defaults={"state": self, "time_asked": timezone.now()}
+        )
+
+
+class QuestionHistory(models.Model):
+    """Intermediate model that records the questions that have been asked to a
+    user in a given session with the time that they were asked.
+
+    Includes a method to find the last question asked in a user session.
+    """
+
+    state = models.ForeignKey(SessionState, on_delete=models.CASCADE)
+    question = models.ForeignKey(EMAQuestions, on_delete=models.CASCADE)
+    time_asked = models.DateTimeField(auto_now_add=True)
+
+    @classmethod
+    def last_question(cls, state):
+        last_asked = cls.objects.filter(state=state).latest("time_asked")
+        return last_asked.question
+
+    @classmethod
+    def questions_asked(cls, state):
+        return cls.objects.filter(state=state).count()
 
 
 class EMAResponse(models.Model):
-    session = models.ForeignKey(
-        EMASession, on_delete=models.CASCADE, related_name="ema_responses"
+    # Note that the session state model contains both user and session details
+    state = models.ForeignKey(
+        SessionState, on_delete=models.CASCADE, related_name="ema_responses"
     )
-    question = models.ManyToManyField(EMAQuestions, related_name="ema_responses")
+    question = models.ForeignKey(
+        EMAQuestions, on_delete=models.CASCADE, related_name="ema_responses"
+    )
     response = models.PositiveSmallIntegerField()
-    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    @classmethod
+    def questions_answered(cls, state):
+        return cls.objects.filter(state=state).count()

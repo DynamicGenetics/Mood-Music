@@ -24,10 +24,12 @@ def respond_to_incoming_message(request):
     text = request.POST.get("Body")
     receieved = timezone.now()
 
-    if get_user_model().objects.filter(phone_number=number).exists():
+    # If a user can be associated with this number then...
+    try:
+        user = get_user_model().objects.filter(phone_number=number).exists()
         # Pass to function to decide on appropriate action
-        reply = manage_response(number, text, receieved)
-    else:
+        reply = manage_response(user, text, receieved)
+    except get_user_model().DoesNotExist:
         # Work out how to tell Twilio we don't want to reply
         reply = "User not recognised"
 
@@ -45,7 +47,7 @@ def start_survey_session(request):
     question = random.choice(EMAQuestions.objects.all())
 
     # Start an EMA Session that will record an id and start_time
-    session = EMASession.objects.create(first_question=question)
+    session = EMASession.objects.create()
 
     message = (
         "Hi, it's time for a survey - please reply within 1 hour. " + question.body
@@ -64,8 +66,7 @@ def start_survey_session(request):
         )
         # Initialise the user's state for this new session
         SessionState.objects.create(
-            user=user, session=session, state=0, last_question=question
+            user=user, session=session, questions_asked=question
         )
 
     return HttpResponse("Messages successfully sent!", 200)
-
