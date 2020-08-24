@@ -1,11 +1,14 @@
 """
 Module to that provides utility and routing functions for EMA survey sms messaging.
 """
+import logging
+
 from django.contrib.auth import get_user_model
 from datetime import datetime
 
-from .models import EMASession, EMAResponse, SessionState, QuestionHistory
+from .models import EMASession, EMAResponse, EMAQuestions, SessionState, QuestionHistory
 
+logger = logging.getLogger(__name__)
 
 AUTO_MESSAGE = {
     "no_active_session": """There is not a survey running at the moment.
@@ -42,30 +45,39 @@ def manage_response(user: get_user_model(), text: str, recieved: datetime) -> st
 
     # Find out if a session is active by seeing if one was started in the last hour
     if latest_session.is_active:
-        state = SessionState.objects.get(user=user, session=latest_session)
+        state = SessionState.objects.get(user__in=user, session=latest_session)
     else:
         return AUTO_MESSAGE["no_active_session"]
 
     # Strip any spaces or punctuation from the message and see if there are any more
     # questions
     text = "".join(e for e in text if e.isalnum())
+    answer_expected = (
+        EMAResponse.objects.filter(state=state).count()
+        < EMAQuestions.objects.all().count()
+    )
     next_message = state.get_next_question()
 
+    logger.info(
+        "Next message should be: {}. State ID is {}. Answer expected is {}".format(
+            next_message, state.id, answer_expected
+        )
+    )
+
     # Main reply logic sequence
-    if next_message is None:
-        # There is no next message, so just say thanks
-        return AUTO_MESSAGE["thanks"]
-    elif (next_message is not None) and (is_valid(text) is False):
-        # There is a next message, but the text is invalid, so ask again
-        return AUTO_MESSAGE["message_invalid"]
+    if answer_expected:
+        if is_valid(text):
+            save_response(text, state)
+            logger.info("The response, {}, has been saved".format(text))
+            if next_message is None:
+                return AUTO_MESSAGE["thanks"]
+            else:
+                state.update(next_message)
+                return next_message.body
+        else:
+            return AUTO_MESSAGE["message_invalid"]
     else:
-        # Assuming this means the response is valid...
-        # Save the response to the db
-        save_response(text, state)
-        # Update the state and record the last question asked
-        state.update(next_message)
-        # Return the string of text for the next question
-        return next_message.body
+        return AUTO_MESSAGE["thanks"]
 
 
 def is_valid(text: str):

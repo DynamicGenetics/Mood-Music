@@ -1,8 +1,11 @@
 import random
+import logging
 
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.utils import timezone
+
+logger = logging.getLogger(__name__)
 
 
 class EMAQuestions(models.Model):
@@ -61,11 +64,16 @@ class SessionState(models.Model):
             answered_qs = self.questions_asked.all()
             # Get the remaining available questions and choose one.
             remaining = all_qs.difference(answered_qs)
-            try:
-                random.choice(remaining)
-            except IndexError:
-                return None
+            if remaining.count() == 1:
+                return remaining.first()
+            else:
+                try:
+                    random.choice(remaining)
+                except IndexError:
+                    logger.info("Index Error Raised - No more questions to ask")
+                    return None
         else:
+            logger.info("No more questions to answer")
             return None
 
     def update(self, next_message):

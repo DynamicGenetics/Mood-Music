@@ -28,13 +28,13 @@ def respond_to_incoming_message(request):
     text = request.POST.get("Body")
     receieved = timezone.now()
     logger.info(
-        "Message receieve. Number: {}, Message: {}, Time: {}".format(
+        "Message receieved. Number: {}, Message: {}, Time: {}".format(
             number, text, receieved
         )
     )
     # If a user can be associated with this number then...
     try:
-        user = get_user_model().objects.filter(phone_number=number).exists()
+        user = get_user_model().objects.filter(phone_number=number)
         # Pass to function to decide on appropriate action
         reply = manage_response(user, text, receieved)
     except get_user_model().DoesNotExist:
@@ -82,6 +82,6 @@ def start_survey_session(request):
         )
         # Initialise the user's state for this new session
         s = SessionState.objects.create(user=user, session=session)
-        s.questions_asked.add(question)
+        s.update(question)
 
     return HttpResponse("Messages successfully sent!", 200)
