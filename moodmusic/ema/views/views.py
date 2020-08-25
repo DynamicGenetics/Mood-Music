@@ -34,7 +34,7 @@ def respond_to_incoming_message(request):
     )
     # If a user can be associated with this number then...
     try:
-        user = get_user_model().objects.filter(phone_number=number)
+        user = get_user_model().objects.filter(phone_number=number)[0]
         # Pass to function to decide on appropriate action
         reply = manage_response(user, text, receieved)
     except get_user_model().DoesNotExist:

@@ -27,9 +27,11 @@ class EMASession(models.Model):
         """Returns bool of whether 60mins have passed since the session started
         """
         diff = timezone.now() - self.start_time
-        mins_elapsed = divmod(diff.seconds, 60)[0]
+        day2min = diff.days * 1440  # Days * Minutes in a Day
+        sec2min = divmod(diff.seconds, 60)[0]
+        mins_elapsed = day2min + sec2min
 
-        if mins_elapsed > 60:
+        if mins_elapsed >= 60:
             return False
         else:
             return True
@@ -86,7 +88,8 @@ class QuestionHistory(models.Model):
     """Intermediate model that records the questions that have been asked to a
     user in a given session with the time that they were asked.
 
-    Includes a method to find the last question asked in a user session.
+    Includes a method to find the last question asked in a user session, and to
+    find out how many questions have been asked in a user session.
     """
 
     state = models.ForeignKey(SessionState, on_delete=models.CASCADE)

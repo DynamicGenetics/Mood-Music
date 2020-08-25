@@ -45,7 +45,7 @@ def manage_response(user: get_user_model(), text: str, recieved: datetime) -> st
 
     # Find out if a session is active by seeing if one was started in the last hour
     if latest_session.is_active:
-        state = SessionState.objects.get(user__in=user, session=latest_session)
+        state = SessionState.objects.get(user=user, session=latest_session)
     else:
         return AUTO_MESSAGE["no_active_session"]
 
@@ -56,19 +56,14 @@ def manage_response(user: get_user_model(), text: str, recieved: datetime) -> st
         EMAResponse.objects.filter(state=state).count()
         < EMAQuestions.objects.all().count()
     )
-    next_message = state.get_next_question()
 
-    logger.info(
-        "Next message should be: {}. State ID is {}. Answer expected is {}".format(
-            next_message, state.id, answer_expected
-        )
-    )
+    # next_message = state.get_next_question()
 
     # Main reply logic sequence
     if answer_expected:
         if is_valid(text):
             save_response(text, state)
-            logger.info("The response, {}, has been saved".format(text))
+            next_message = state.get_next_question()
             if next_message is None:
                 return AUTO_MESSAGE["thanks"]
             else:
