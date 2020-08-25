@@ -18,7 +18,7 @@ urlpatterns = [
     # Your stuff: custom urls includes go here
     path("dashboard/", include("moodmusic.dashboard.urls")),
     path("survey/", include("survey.urls")),
-    path("ema/", include("ema.urls")),
+    path("ema/", include("moodmusic.ema.urls")),
     path("", include("social_django.urls", namespace="social")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
