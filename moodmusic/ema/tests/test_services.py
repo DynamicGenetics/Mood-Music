@@ -1,4 +1,5 @@
 import pytest
+import random
 
 from django.contrib.auth import get_user_model
 from django.test import TestCase
@@ -6,10 +7,9 @@ from django.test import TestCase
 from moodmusic.ema.services import (
     manage_response,
     is_valid,
-    save_response,
     AUTO_MESSAGE,
 )
-from moodmusic.ema.models import EMASession, SessionState, EMAQuestions
+from moodmusic.ema.models import SessionState, EMAQuestions
 from moodmusic.ema.tests.test_models import create_EMASession
 
 
@@ -49,13 +49,38 @@ class TestManageResponse(TestCase):
         reply = manage_response(user, "invalid", "")
         assert reply == AUTO_MESSAGE["message_invalid"]
 
-    # def test_answer_not_expected(self):
-    #     """For when the user has answered all the questions.
-    #     """
-    #     session = create_EMASession(5)
-    #     user = get_user_model().objects.create(phone_number="549")
-    #     state = SessionState.objects.create(user=user, session=session)
+    def test_answer_not_expected(self):
+        """For when the user has answered all the questions.
+        NB assumes there are only two questions.
+        """
+        # Set up objects and mock the Question History for two questions
+        session = create_EMASession(5)
+        user = get_user_model().objects.create(phone_number="549")
+        state = SessionState.objects.create(user=user, session=session)
+        first_question = random.choice(EMAQuestions.objects.all())
+        state.update(first_question)
+        next_question = state.get_next_question()
+        state.update(next_question)
 
-    #     save_response("10", state)
-    #     save_response("6", state)
+        reply = manage_response(user, "10", "")
+        assert reply == AUTO_MESSAGE["thanks"]
 
+    def test_get_next_question(self):
+        """For when the user should be sent the next question
+        """
+        # Initialise objects and mock one object into QuestionHistory
+        session = create_EMASession(5)
+        user = get_user_model().objects.create(phone_number="549")
+        state = SessionState.objects.create(user=user, session=session)
+        first_question = random.choice(EMAQuestions.objects.all())
+        state.update(first_question)
+
+        # Assume one question already sent
+        reply = manage_response(user, "10", "")
+
+        # Get all the potential questions
+        possible_qs = []
+        for question in EMAQuestions.objects.all():
+            possible_qs.append(question.body)
+        # Make sure the next question returned is one of the questions.
+        assert reply in possible_qs
