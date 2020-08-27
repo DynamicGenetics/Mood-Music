@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 @csrf_exempt
 @validate_twilio_request
 def respond_to_incoming_message(request):
-    """Responds to a text message to the Twilio number with a predefined message"""
+    """Responds to an incoming text message with an appropriate message"""
 
     # Get message content
     number = request.POST.get("From")
@@ -32,26 +32,32 @@ def respond_to_incoming_message(request):
             number, text, receieved
         )
     )
+
+    # Set up the Twilio messaging object
+    resp = MessagingResponse()
+
     # If a user can be associated with this number then...
     try:
         user = get_user_model().objects.filter(phone_number=number)[0]
         # Pass to function to decide on appropriate action
         reply = manage_response(user, text, receieved)
+        # Add the return message to the response
+        resp.message(reply)
+
+        # Return this response with a success code
+        return HttpResponse(str(resp), 200)
+
     except get_user_model().DoesNotExist:
-        # Work out how to tell Twilio we don't want to reply
-        reply = "User not recognised"
+
         logger.info(
             "Message from unrecognised number. Number: {}, Message: {}, Time: {}".format(
                 number, text, receieved
             )
         )
-
-    # Start response
-    resp = MessagingResponse()
-    # Add a text message to the response
-    resp.message(reply)
-
-    return HttpResponse(str(resp))
+        reply = "Sorry, we don't know this number. Get in touch if you think that we should."
+        resp.message(reply)
+        # Return with a 401 'Unauthorised' code - client must authenticate to get correct response.
+        return HttpResponse(str(), 401)
 
 
 def start_survey_session(request):
