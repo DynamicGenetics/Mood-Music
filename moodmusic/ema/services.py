@@ -41,12 +41,14 @@ def manage_response(user: get_user_model(), text: str, recieved: datetime) -> st
     try:
         latest_session = EMASession.objects.latest("start_time")
     except EMASession.DoesNotExist:
+        logger.info("No active session returned (none set).")
         return AUTO_MESSAGE["no_active_session"]
 
     # Find out if a session is active by seeing if one was started in the last hour
     if latest_session.is_active:
         state = SessionState.objects.get(user=user, session=latest_session)
     else:
+        logger.info("No active session returned (non active).")
         return AUTO_MESSAGE["no_active_session"]
 
     # Strip any spaces or punctuation from the message and see if there are any more
