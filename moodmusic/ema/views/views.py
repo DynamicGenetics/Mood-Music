@@ -45,7 +45,7 @@ def respond_to_incoming_message(request):
         resp.message(reply)
 
         # Return this response with a success code
-        return HttpResponse(str(resp), 200)
+        return HttpResponse(str(resp))
 
     except get_user_model().DoesNotExist:
 
@@ -57,7 +57,7 @@ def respond_to_incoming_message(request):
         reply = "Sorry, we don't know this number. Get in touch if you think that we should."
         resp.message(reply)
         # Return with a 401 'Unauthorised' code - client must authenticate to get correct response.
-        return HttpResponse(str(), 401)
+        return HttpResponse(str(resp))
 
 
 def start_survey_session(request):
