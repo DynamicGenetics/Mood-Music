@@ -7,9 +7,10 @@ from django.test import TestCase
 from moodmusic.ema.services import (
     manage_response,
     is_valid,
+    save_response,
     AUTO_MESSAGE,
 )
-from moodmusic.ema.models import SessionState, EMAQuestions
+from moodmusic.ema.models import SessionState, EMAQuestions, EMAResponse
 from moodmusic.ema.tests.test_models import create_EMASession
 
 
@@ -84,3 +85,19 @@ class TestManageResponse(TestCase):
             possible_qs.append(question.body)
         # Make sure the next question returned is one of the questions.
         assert reply in possible_qs
+
+    def test_save_response(self):
+        # Add two questions
+        session = create_EMASession(5)
+        user = get_user_model().objects.create(phone_number="")
+        state = SessionState.objects.create(user=user, session=session)
+        question = random.choice(EMAQuestions.objects.all())
+        state.update(question)
+        # Try to save the response
+        save_response("8", state)
+        # Get the saved response
+        saved = EMAResponse.objects.all().latest("created_at")
+        # Assert...
+        assert saved.state == state
+        assert saved.question == question
+        assert saved.response == 8
