@@ -1,12 +1,15 @@
+name: Testing
+
 env:
-  POSTGRES_PASSWORD: postgres
-  POSTGRES_USER: postgres
+  # Postgres variables
   POSTGRES_HOST: localhost
   POSTGRES_PORT: 5432
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: postgres
+  #API keys
   SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
   SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_SECRET_ID }}
-
-name: Integration Testing
+  TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
 
 on:
   push:
@@ -60,15 +63,7 @@ jobs:
 
     - name: Database Migrations
       run: python manage.py migrate
-      #env:
-        #SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
-        #SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_SECRET_ID }}
 
     - name: Run Tests
       run: |
         pytest
-      #env:
-       # SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
-       # SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_SECRET_ID }}
-       # POSTGRES_HOST: localhost
-       # POSTGRES_PORT: 5432
