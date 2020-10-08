@@ -41,15 +41,8 @@ class SessionState(models.Model):
     """Data about the user's current state in the EMA survey session. There is
     one instance per user per survey session which is updated as they reply.
 
-    state: int
-        Proxy value for the number of replies recieved. Number of messages sent
-        by the application is always assumed to be state + 1.
     questions_asked: EMAQuestion
         The questions the user has been sent.
-    last_updated: datetime
-        The date and time that this state was last changed.
-    last_question: EMAQuestions
-        The last question that has been sent to the user.
     """
 
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
