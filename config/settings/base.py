@@ -105,8 +105,9 @@ AUTHENTICATION_BACKENDS = [
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-user-model
 AUTH_USER_MODEL = "users.User"
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-redirect-url
-LOGIN_REDIRECT_URL = "users:redirect"
+LOGIN_REDIRECT_URL = "/dashboard"
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-url
+LOGIN_URL = "/accounts/login/"
 
 # PASSWORDS
 # ------------------------------------------------------------------------------
@@ -290,7 +291,7 @@ ACCOUNT_FORMS = {"signup": "users.forms.CustomSignupForm"}
 SOCIAL_AUTH_URL_NAMESPACE = "social"
 SOCIAL_AUTH_POSTGRES_JSONFIELD = True
 
-LOGIN_URL = "/login/"
+# This is going to be a problem...
 LOGIN_REDIRECT_URL = "/dashboard/thanks"
 SOCIAL_AUTH_STRATEGY = "social_django.strategy.DjangoStrategy"
 SOCIAL_AUTH_STORAGE = "social_django.models.DjangoStorage"
