@@ -52,7 +52,7 @@
             {% if request.user.is_authenticated %}
               <li class="nav-item">
                 {# URL provided by django-allauth/account/urls.py #}
-                <a id="dashboard-link" class="nav-link" href="{% url 'dashboard' %}">{% trans "My Dashboard" %}</a>
+                <a id="dashboard-link" class="nav-link" href="{% url 'dashboard:index' %}">{% trans "My Dashboard" %}</a>
               </li>
               <li class="nav-item">
                 {# URL provided by django-allauth/account/urls.py #}
