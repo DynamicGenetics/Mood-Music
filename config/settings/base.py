@@ -107,7 +107,6 @@ AUTH_USER_MODEL = "users.User"
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-redirect-url
 LOGIN_REDIRECT_URL = "users:redirect"
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-url
-LOGIN_URL = "account_login"
 
 # PASSWORDS
 # ------------------------------------------------------------------------------
@@ -270,16 +269,21 @@ LOGGING = {
 # django-allauth
 # ------------------------------------------------------------------------------
 ACCOUNT_ALLOW_REGISTRATION = env.bool("DJANGO_ACCOUNT_ALLOW_REGISTRATION", True)
-# https://django-allauth.readthedocs.io/en/latest/configuration.html
-ACCOUNT_AUTHENTICATION_METHOD = "username"
+
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 ACCOUNT_EMAIL_REQUIRED = True
-# https://django-allauth.readthedocs.io/en/latest/configuration.html
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
-# https://django-allauth.readthedocs.io/en/latest/configuration.html
+ACCOUNT_AUTHENTICATION_METHOD = "email"
+
+# Redirects
+ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = "/dashboard/"
+
+# Custom adapters for forms
 ACCOUNT_ADAPTER = "moodmusic.users.adapters.AccountAdapter"
-# https://django-allauth.readthedocs.io/en/latest/configuration.html
-SOCIALACCOUNT_ADAPTER = "moodmusic.users.adapters.SocialAccountAdapter"
+# Customised forms
+ACCOUNT_FORMS = {"signup": "users.forms.CustomSignupForm"}
 
 # Social Django App Settings
 # ------------------------------------------------------------------------------
@@ -306,3 +310,4 @@ SOCIAL_AUTH_PIPELINE = (
 SOCIAL_AUTH_SPOTIFY_KEY = os.environ["SPOTIFY_CLIENT_ID"]
 SOCIAL_AUTH_SPOTIFY_SECRET = os.environ["SPOTIFY_CLIENT_SECRET"]
 SOCIAL_AUTH_SPOTIFY_SCOPE = ["user-read-recently-played", "user-library-read"]
+
