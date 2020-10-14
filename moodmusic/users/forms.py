@@ -1,7 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth import get_user_model
-from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 from allauth.account.forms import SignupForm
 from phonenumber_field.formfields import PhoneNumberField
@@ -89,11 +88,14 @@ class CustomSignupForm(SignupForm):
     # and then any unspecified fields are below.
     field_order = ["name", "email", "phone_number", "password1", "password2"]
 
-    def signup(self, request, user):
+    def save(self, request):
+        # Instructions https://django-allauth.readthedocs.io/en/latest/forms.html
+        user = super(CustomSignupForm, self).save(request)
+
         user.name = self.cleaned_data["name"]
         user.phone_number = self.cleaned_data["phone_number"]
         # Note that email is saved through adapters.py to restrict non bristol addresses
-        user.email = self.clean_email()
-        user.consent_granted = True
+        user.email = self.cleaned_data["email"]
+        user.consent_granted = self.cleaned_data["consent_granted"]
         user.save()
         return user
