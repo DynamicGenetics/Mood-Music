@@ -7,12 +7,12 @@ from django.contrib.auth.decorators import login_required
 from .forms import ConsentForm
 
 
-class ConsentView(LoginRequiredMixin, CreateView):
+class ConsentView(CreateView):
     """View to display the consent form"""
 
     template_name = "dashboard/consent-form.html"
     form_class = ConsentForm
-    success_url = reverse_lazy("dashboard:thanks")
+    success_url = reverse_lazy("accounts:signup")
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
