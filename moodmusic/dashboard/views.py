@@ -1,24 +1,5 @@
 from django.shortcuts import render
-from django.urls import reverse_lazy
-from django.views.generic.edit import CreateView
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
-
-from .forms import ConsentForm
-
-
-class ConsentView(CreateView):
-    """View to display the consent form"""
-
-    template_name = "dashboard/consent-form.html"
-    form_class = ConsentForm
-    success_url = reverse_lazy("accounts:signup")
-
-    def form_valid(self, form):
-        self.object = form.save(commit=False)
-        self.object.user = self.request.user
-        self.object.save()
-        return super().form_valid(form)
 
 
 @login_required

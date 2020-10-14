@@ -8,5 +8,4 @@ urlpatterns = [
     path("spotify-connect/", view=views.spotify, name="spotify"),
     path("mobile-surveys/", view=views.mobile_guide, name="mobile_guide"),
     path("data-drop/", views.datadrop, name="datadrop"),
-    path("consent/", views.ConsentView.as_view(), name="consent"),
 ]
