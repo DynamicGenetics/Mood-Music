@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import UpdateView
 from django.contrib.auth import get_user_model
+from phonenumber_field.widgets import PhoneNumberInternationalFallbackWidget
 
 from .twilio_client import verification_checks, verifications
 from .forms import TokenForm
@@ -37,15 +38,22 @@ class PhoneVerificationView(LoginRequiredMixin, UpdateView):
     model = get_user_model()
     fields = ["phone_number"]
     template_name = "dashboard/phone-verification.html"
-    # success_url =
+
+    def get_form(self, form_class=None):
+        form = super(PhoneVerificationView, self).get_form(form_class)
+        # This widget defaults to a UK number, unless a country code is specified
+        form.fields["phone_number"].widget = PhoneNumberInternationalFallbackWidget()
+        return form
 
     def form_valid(self, form):
         self.request.session["phone_number"] = form.cleaned_data["phone_number"].as_e164
+        # Send the phone number to Twilio to generate a verification code
         verifications(form.cleaned_data["phone_number"].as_e164, via="sms")
         return super().form_valid(form)
 
     def get_object(self, queryset=None):
         # NB this is really important for authorisation!
+        # Makes sure that only the logged in user's number is shown.
         return self.request.user
 
     def get_success_url(self):

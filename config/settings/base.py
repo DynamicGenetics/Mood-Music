@@ -312,3 +312,5 @@ SOCIAL_AUTH_SPOTIFY_KEY = os.environ["SPOTIFY_CLIENT_ID"]
 SOCIAL_AUTH_SPOTIFY_SECRET = os.environ["SPOTIFY_CLIENT_SECRET"]
 SOCIAL_AUTH_SPOTIFY_SCOPE = ["user-read-recently-played", "user-library-read"]
 
+# For PhoneNumberWidget to work
+PHONENUMBER_DEFAULT_REGION = "GB"
