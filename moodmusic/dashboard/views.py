@@ -1,4 +1,5 @@
 import json
+from datetime import datetime, timezone
 from django.shortcuts import render, redirect, reverse
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
@@ -109,26 +110,36 @@ class DataDropView(LoginRequiredMixin, FormView):
             return self.form_invalid(form)
 
 
+datadrop = DataDropView.as_view()
+
+
 def handle_uploaded_file(file, user):
     """For each uploaded JSON file, save the
     fields we are interested in to the database"""
-    history = json.load(file)
+    try:
+        history = json.load(file)
+    except json.decoder.JSONDecodeError:
+        history = json.load(file.decode("utf-8"))
+        # Generate all the objects first and then do a
+        # bulk save to the database. This avoids too many data-
+        # base calls.
+    try:
+        songs = [
+            FullUserHistory(
+                user=user,
+                end_time=datetime.strptime(song["endTime"], "%Y-%m-%d %H:%M").replace(
+                    tzinfo=timezone.utc
+                ),
+                artist=song["artistName"],
+                track_name=song["trackName"],
+                ms_played=int(song["msPlayed"]),
+            )
+            for song in history
+        ]
 
-    # Generate all the objects first and then do a
-    # bulk save to the database. This avoids too many data-
-    # base calls.
-    songs = [
-        FullUserHistory(
-            user=user,
-            end_time=song["endTime"],
-            artist=song["artistName"],
-            track_name=song["trackName"],
-            ms_played=int(song["msPlayed"]),
-        )
-        for song in history
-    ]
+        # Save to database
+        FullUserHistory.objects.bulk_create(songs)
 
-    FullUserHistory.objects.bulk_create(songs)
-
-
-datadrop = DataDropView.as_view()
+    except Exception as e:
+        # TODO: Insert logging!
+        raise e
