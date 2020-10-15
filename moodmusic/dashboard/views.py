@@ -1,12 +1,15 @@
+import json
 from django.shortcuts import render, redirect, reverse
+from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic.edit import UpdateView
+from django.views.generic.edit import UpdateView, FormView
 from django.contrib.auth import get_user_model
 from phonenumber_field.widgets import PhoneNumberInternationalFallbackWidget
 
 from .twilio_client import verification_checks, verifications
-from .forms import TokenForm
+from .forms import TokenForm, UploadListeningHistoryForm
+from moodmusic.music.models import FullUserHistory
 
 
 @login_required
@@ -22,11 +25,6 @@ def thanks(request):
 @login_required
 def spotify(request):
     return render(request, "dashboard/spotify-connect.html", {})
-
-
-@login_required
-def datadrop(request):
-    return render(request, "dashboard/data-drop.html", {})
 
 
 @login_required
@@ -88,6 +86,49 @@ def token_validation(request):
 
 @login_required
 def verified(request):
+    """View to confirm to user that their number is verified"""
     if not request.session["is_verified"]:
         return redirect("dashboard:phone_verification")
     return render(request, "dashboard/verified.html")
+
+
+class DataDropView(LoginRequiredMixin, FormView):
+    form_class = UploadListeningHistoryForm
+    template_name = "dashboard/data-drop.html"
+    success_url = reverse_lazy("dashboard:thanks")
+
+    def post(self, request, *args, **kwargs):
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        files = request.FILES.getlist("file_field")
+        if form.is_valid():
+            for f in files:
+                handle_uploaded_file(f, request.user)
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+
+def handle_uploaded_file(file, user):
+    """For each uploaded JSON file, save the
+    fields we are interested in to the database"""
+    history = json.load(file)
+
+    # Generate all the objects first and then do a
+    # bulk save to the database. This avoids too many data-
+    # base calls.
+    songs = [
+        FullUserHistory(
+            user=user,
+            end_time=song["endTime"],
+            artist=song["artistName"],
+            track_name=song["trackName"],
+            ms_played=int(song["msPlayed"]),
+        )
+        for song in history
+    ]
+
+    FullUserHistory.objects.bulk_create(songs)
+
+
+datadrop = DataDropView.as_view()

@@ -74,4 +74,8 @@ class FullUserHistory(models.Model):
     user = models.ForeignKey(
         get_user_model(), on_delete=models.CASCADE, related_name="uploaded_history"
     )
-    full_history = JSONField()
+    end_time = models.DateTimeField()
+    artist = models.CharField(max_length=600)
+    track_name = models.CharField(max_length=600)
+    ms_played = models.IntegerField()
+    time_added = models.DateTimeField(auto_now_add=True)

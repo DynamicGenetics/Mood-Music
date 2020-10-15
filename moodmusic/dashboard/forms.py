@@ -10,3 +10,9 @@ class TokenForm(forms.Form):
     """
 
     token = forms.CharField(label="Verification Token")
+
+
+class UploadListeningHistoryForm(forms.Form):
+    file_field = forms.FileField(
+        widget=forms.ClearableFileInput(attrs={"multiple": True})
+    )
