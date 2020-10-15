@@ -1,7 +1,7 @@
 from twilio.rest import Client
 import os
 
-client = Client(os.environ["TWILIO_VERIFY_SID"], os.environ["TWILIO_AUTH_TOKEN"])
+client = Client(os.environ["TWILIO_ACCOUNT_SID"], os.environ["TWILIO_AUTH_TOKEN"])
 
 
 def verifications(phone_number, via):
@@ -12,5 +12,5 @@ def verifications(phone_number, via):
 
 def verification_checks(phone_number, token):
     return client.verify.services(
-        os.environ["TWILIO_AUTH_TOKEN"]
+        os.environ["TWILIO_VERIFY_SID"]
     ).verification_checks.create(to=phone_number, code=token)

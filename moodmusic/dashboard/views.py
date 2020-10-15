@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import UpdateView
@@ -37,8 +37,10 @@ class PhoneVerificationView(LoginRequiredMixin, UpdateView):
     model = get_user_model()
     fields = ["phone_number"]
     template_name = "dashboard/phone-verification.html"
+    # success_url =
 
     def form_valid(self, form):
+        self.request.session["phone_number"] = form.cleaned_data["phone_number"].as_e164
         verifications(form.cleaned_data["phone_number"].as_e164, via="sms")
         return super().form_valid(form)
 
@@ -47,7 +49,7 @@ class PhoneVerificationView(LoginRequiredMixin, UpdateView):
         return self.request.user
 
     def get_success_url(self):
-        return redirect(token_validation)
+        return reverse("dashboard:token_validation")
 
 
 phone_verification = PhoneVerificationView.as_view()
@@ -64,7 +66,10 @@ def token_validation(request):
 
             if verification.status == "approved":
                 request.session["is_verified"] = True
-                return redirect("verified")
+                # Update user record in the database
+                request.user.phone_verified = True
+                request.user.save()
+                return redirect("dashboard:verified")
             else:
                 for error_msg in verification.errors().values():
                     form.add_error(None, error_msg)
@@ -75,6 +80,6 @@ def token_validation(request):
 
 @login_required
 def verified(request):
-    if not request.session.get("is_verified"):
-        return redirect("phone_verification")
+    if not request.session["is_verified"]:
+        return redirect("dashboard:phone_verification")
     return render(request, "dashboard/verified.html")
