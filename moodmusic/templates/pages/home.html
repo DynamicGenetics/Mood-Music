@@ -20,7 +20,8 @@
     <!-- Latest compiled and minified Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link href="{% static 'css/project.css' %}" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
+
     {% endblock %}
 
   </head>
@@ -36,10 +37,10 @@
       {% endif %}
 
       {% block content %}
-        <div class="col-xs-12 col-md-8">
+        <div class="col-xs-12 col-md-6">
           <div class="home-text">
-            <h1 class="display-4">Mood Music Study</h1>
-            <p class="lead">We are interested in the relationship between music and mood.</p>
+            <h1 class="display-4">Mood Music</h1>
+            <p class="lead">We are running a research study to explore the relationship between music and mood.</p>
             <a class="btn btn-info btn-lg" href="{% url 'about' %}" role="button">Find Out More</a>
             <a class="btn btn-light btn-lg" href="{% url 'account_login' %}" role="button">Log in</a>
           </div>

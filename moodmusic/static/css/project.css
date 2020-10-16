@@ -12,12 +12,23 @@
   border-color: #eed3d7;
 }
 
+/* Home Page CSS */
+
 body.home {
   background: url("../images/homepage.png") no-repeat center center fixed;
-  background-size: 75%;
+  background-size: 90%;
 }
 
 .home-text {
   padding-top: 170px;
+}
 
+h1 {
+  font-family: 'Permanent Marker', cursive;
+  padding-top: 5%;
+  padding-bottom: 20px;
+}
+
+.btn {
+  margin: 15px 15px 15px 15px;
 }
