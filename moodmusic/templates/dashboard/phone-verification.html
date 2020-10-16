@@ -2,6 +2,9 @@
 
 {% block content %}
 
+Type you phone number below. If you have a UK number you can type it as you usually would, beginning with "07". 
+If you have an international phone number then include the country code after a "+" sign. 
+
 <form method="post">
   {% csrf_token %}
   {{ form.as_p }}

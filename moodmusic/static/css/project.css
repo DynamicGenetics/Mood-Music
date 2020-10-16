@@ -11,3 +11,13 @@
   background-color: #f2dede;
   border-color: #eed3d7;
 }
+
+body.home {
+  background: url("../images/homepage.png") no-repeat center center fixed;
+  background-size: 75%;
+}
+
+.home-text {
+  padding-top: 170px;
+
+}

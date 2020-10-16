@@ -3,6 +3,10 @@
 
 {% block content %}
 
-Some information about putting a password on your phone, and the option to delete the messages after you have replied to them. 
+
+<p>Some information about putting a password on your phone, and the option to delete the messages after you have replied to them. 
+When you are satisfied you understand, please click below to add and verify your phone number. </p>
+
+<a href="{% url 'dashboard:phone_verification' %}" class="btn btn-primary" role="button">Add my phone number</a>
 
 {% endblock %}
