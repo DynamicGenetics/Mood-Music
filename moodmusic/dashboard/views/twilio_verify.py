@@ -1,36 +1,12 @@
-import json
-from datetime import datetime, timezone
 from django.shortcuts import render, redirect, reverse
-from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic.edit import UpdateView, FormView
 from django.contrib.auth import get_user_model
+from django.views.generic.edit import UpdateView
 from phonenumber_field.widgets import PhoneNumberInternationalFallbackWidget
 
-from .twilio_client import verification_checks, verifications
-from .forms import TokenForm, UploadListeningHistoryForm
-from moodmusic.music.models import FullUserHistory
-
-
-@login_required
-def dashboard(request):
-    return render(request, "dashboard/dashboard.html", {})
-
-
-@login_required
-def thanks(request):
-    return render(request, "dashboard/thanks.html", {})
-
-
-@login_required
-def spotify(request):
-    return render(request, "dashboard/spotify-connect.html", {})
-
-
-@login_required
-def mobile_guide(request):
-    return render(request, "dashboard/mobile-surveys.html", {})
+from moodmusic.dashboard.twilio_client import verification_checks, verifications
+from moodmusic.dashboard.forms import TokenForm
 
 
 class PhoneVerificationView(LoginRequiredMixin, UpdateView):
@@ -91,55 +67,3 @@ def verified(request):
     if not request.session["is_verified"]:
         return redirect("dashboard:phone_verification")
     return render(request, "dashboard/verified.html")
-
-
-class DataDropView(LoginRequiredMixin, FormView):
-    form_class = UploadListeningHistoryForm
-    template_name = "dashboard/data-drop.html"
-    success_url = reverse_lazy("dashboard:thanks")
-
-    def post(self, request, *args, **kwargs):
-        form_class = self.get_form_class()
-        form = self.get_form(form_class)
-        files = request.FILES.getlist("file_field")
-        if form.is_valid():
-            for f in files:
-                handle_uploaded_file(f, request.user)
-            return self.form_valid(form)
-        else:
-            return self.form_invalid(form)
-
-
-datadrop = DataDropView.as_view()
-
-
-def handle_uploaded_file(file, user):
-    """For each uploaded JSON file, save the
-    fields we are interested in to the database"""
-    try:
-        history = json.load(file)
-    except json.decoder.JSONDecodeError:
-        history = json.load(file.decode("utf-8"))
-        # Generate all the objects first and then do a
-        # bulk save to the database. This avoids too many data-
-        # base calls.
-    try:
-        songs = [
-            FullUserHistory(
-                user=user,
-                end_time=datetime.strptime(song["endTime"], "%Y-%m-%d %H:%M").replace(
-                    tzinfo=timezone.utc
-                ),
-                artist=song["artistName"],
-                track_name=song["trackName"],
-                ms_played=int(song["msPlayed"]),
-            )
-            for song in history
-        ]
-
-        # Save to database
-        FullUserHistory.objects.bulk_create(songs)
-
-    except Exception as e:
-        # TODO: Insert logging!
-        raise e
