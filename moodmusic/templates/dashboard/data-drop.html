@@ -5,8 +5,13 @@
 
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
+
+    {{ form.non_field_errors }}
+    {{ form.file_field.errors}}
+
     {{ form.as_p }}
     <input type="submit" value="Upload my files">
-  </form>
+</form>
+
 
 {% endblock %}
