@@ -17,6 +17,7 @@
 body.home {
   background: url("../images/homepage.png") no-repeat center center fixed;
   background-size: 90%;
+  background-position-y: 80%; 
 }
 
 .home-text {
