@@ -4,9 +4,16 @@
 {% block content %}
 
 
-<p>Some information about putting a password on your phone, and the option to delete the messages after you have replied to them. 
-When you are satisfied you understand, please click below to add and verify your phone number. </p>
+<p>You will be receiving your daily surveys by text message which will be sent from our study phone number. This step is to make sure we have
+    the right phone number for you, and to make sure you can recieve messages from us.
+</p>
+<p>We will be keeping the responses that you send us secure, but here are some tips to keep the message history on your phone secure too.
+    <ol>
+        <li>Make sure that your phone has a passcode so that other people cannot access your data.</li>
+        <li>If you wish you can delete the message history after you have sent your replies. This will not affect our copy of the 
+            data and will only delete the history from your phone.</li>
+    </ol></p>
 
-<a href="{% url 'dashboard:phone_verification' %}" class="btn btn-primary" role="button">Add my phone number</a>
+<a href="{% url 'dashboard:phone_verification' %}" class="btn btn-primary" role="button">I understand, add my phone number</a>
 
 {% endblock %}
