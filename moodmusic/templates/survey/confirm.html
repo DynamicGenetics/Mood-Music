@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Survey submitted</h2>
+<p>
+    Thanks! Your answers have been saved. You will not be able to edit your answers if you come back to this survey again.
+</p>
+
+<a href="{% url 'survey-list' %}" class="btn btn-primary" role="button">Take me back to the survey list</a>
+<a href="{% url 'dashboard:index' %}" class="btn btn-primary" role="button">Take me back to my dashboard</a>
+
+{% endblock content %}

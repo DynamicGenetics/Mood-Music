@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div id="intro">
+	<h2>Surveys to complete</h2>
+    Click on each survey below to complete it. 
+    
+    {% for survey in surveys %}
+    <p><a href="{{ survey.get_absolute_url }}">{{survey.name}}</a></p>
+    {% endfor %}
+</div>
+{% endblock content %}
