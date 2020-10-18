@@ -40,9 +40,16 @@ def respond_to_incoming_message(request):
     try:
         user = get_user_model().objects.filter(phone_number=number)[0]
         # Pass to function to decide on appropriate action
-        reply = manage_response(user, text, receieved)
-        # Add the return message to the response
-        resp.message(reply)
+
+        if user.phone_verified is False:
+            resp.message(
+                """Please verify your phonenumber through your online
+            dashboard. """
+            )
+        else:
+            reply = manage_response(user, text, receieved)
+            # Add the return message to the response
+            resp.message(reply)
 
         # Return this response with a success code
         return HttpResponse(str(resp))
@@ -75,8 +82,8 @@ def start_survey_session(request):
     # Set up the Twilio client to send messages
     client = Client(os.environ["TWILIO_ACCOUNT_SID"], os.environ["TWILIO_AUTH_TOKEN"])
 
-    # Get all the users
-    users = get_user_model().objects.all()
+    # Get all the users whose phone numbers are verified.
+    users = get_user_model().objects.filter(phone_verified=True)
 
     for user in users:
         # Send message
