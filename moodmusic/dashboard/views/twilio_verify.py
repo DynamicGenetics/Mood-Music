@@ -1,9 +1,11 @@
+from django.contrib import messages
 from django.shortcuts import render, redirect, reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import get_user_model
 from django.views.generic.edit import UpdateView
 from phonenumber_field.widgets import PhoneNumberInternationalFallbackWidget
+from django.http import HttpResponseRedirect
 
 from moodmusic.dashboard.twilio_client import verification_checks, verifications
 from moodmusic.dashboard.forms import TokenForm
@@ -54,8 +56,13 @@ def token_validation(request):
                 request.user.save()
                 return redirect("dashboard:verified")
             else:
-                for error_msg in verification.errors().values():
-                    form.add_error(None, error_msg)
+                messages.add_message(
+                    request,
+                    messages.ERROR,
+                    """Sorry, that token was not correct. Please try again, or go back
+                        to check your phone number is correct.""",
+                )
+                HttpResponseRedirect(request.path_info)
     else:
         form = TokenForm()
     return render(request, "dashboard/token-validation.html", {"form": form})
