@@ -1,6 +1,6 @@
 import pytest
 
-from moodmusic.users.forms import UserCreationForm
+from moodmusic.users.forms import CustomSignupForm
 from moodmusic.users.tests.factories import UserFactory
 
 pytestmark = pytest.mark.django_db
@@ -11,25 +11,27 @@ class TestUserCreationForm:
         # A user with proto_user params does not exist yet.
         proto_user = UserFactory.build()
 
-        form = UserCreationForm(
+        form = CustomSignupForm(
             {
-                "username": proto_user.username,
+                "name": proto_user.name,
+                "email": proto_user.email,
                 "password1": proto_user._password,
                 "password2": proto_user._password,
             }
         )
 
         assert form.is_valid()
-        assert form.clean_username() == proto_user.username
+        assert form.clean_email() == proto_user.email
 
         # Creating a user.
         form.save()
 
         # The user with proto_user params already exists,
         # hence cannot be created.
-        form = UserCreationForm(
+        form = CustomSignupForm(
             {
-                "username": proto_user.username,
+                "name": proto_user.name,
+                "email": proto_user.email,
                 "password1": proto_user._password,
                 "password2": proto_user._password,
             }

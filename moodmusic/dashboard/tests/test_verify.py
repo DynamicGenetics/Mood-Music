@@ -1,13 +1,12 @@
+import mock
+import pytest
+from pytest_mock import mocker
+
 from django.conf import settings
 from django.test import TestCase, Client
 
-try:
-    from unittest.mock import patch, MagicMock, Mock
-except ImportError:
-    from mock import patch, MagicMock
-
-from . import views
-from .forms import VerificationForm
+from moodmusic.dashboard.views import phone_verification, token_validation, verified
+from moodmusic.dashboard.forms import TokenForm
 
 
 class MockVerificationForm:
@@ -41,13 +40,14 @@ class MockErrorValues:
 
 
 class PhoneVerificationTestCase(TestCase):
-    @patch(
+    mocker.patch(
         "phone_verification.views.twilio_client.verifications",
         return_value="mock verifications!",
     )
-    @patch(
+    mocker.patch(
         "phone_verification.views.VerificationForm", return_value=MockVerificationForm()
     )
+
     def test_phone_verification_redirects_to_token_validation(
         self, mock_verification_form, mock_twilio_client
     ):
@@ -65,11 +65,12 @@ class PhoneVerificationTestCase(TestCase):
         response = client.get("/verification/")
         self.assertTemplateUsed(response, "phone_verification.html")
 
-    @patch(
+    mocker.patch(
         "phone_verification.views.twilio_client.verification_checks",
         return_value=MockVerification("approved"),
     )
-    @patch("phone_verification.views.TokenForm", return_value=MockTokenForm())
+    mocker.patch("phone_verification.views.TokenForm", return_value=MockTokenForm())
+
     def test_token_validation_redirects_to_verified_when_status_not_approved(
         self, mock_token_form, mock_twilio_client
     ):
@@ -84,11 +85,12 @@ class PhoneVerificationTestCase(TestCase):
         assert response.status_code == 302
         assert "/verified/" in response.url
 
-    @patch(
+    mocker.patch(
         "phone_verification.views.twilio_client.verification_checks",
         return_value=MockVerification("pending"),
     )
-    @patch("phone_verification.views.TokenForm", return_value=MockTokenForm())
+    mocker.patch("phone_verification.views.TokenForm", return_value=MockTokenForm())
+
     def test_token_validation_error_when_status_not_approved(
         self, mock_token_form, mock_twilio_client
     ):
