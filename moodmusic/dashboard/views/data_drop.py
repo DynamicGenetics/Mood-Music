@@ -1,17 +1,17 @@
 import json
 import os
-import sys
 import logging
 from datetime import datetime, timezone
 from django.core.exceptions import ValidationError
 from django.contrib import messages
-from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic.edit import FormView
 
 from moodmusic.dashboard.forms import UploadListeningHistoryForm
 from moodmusic.music.models import FullUserHistory
+
+logger = logging.getLogger(__name__)
 
 
 class DataDropView(LoginRequiredMixin, SuccessMessageMixin, FormView):
