@@ -5,6 +5,27 @@
 
 {% block content %}
 
+<h3>How to request your personal data from Spotify</h3>
+
+<p>Spotify allows you to download your personal user data from the 'Privacy Settings' section of your 
+    Spotify account. Here is how to request it: </p>
+    
+    <ol>
+        <li>Go to <a href="https://www.spotify.com/us/account/privacy/" target="_blank">www.spotify.com/us/account/privacy/</a>. 
+            You might need to log in.</li>
+        <li>Go to the bottom of the page to a section called 'Download My Data'.</li>
+        <li>If you follow the instructions then Spotify will email you a link to download
+            you data. This usually happens within 24 hours.</li>
+        <li>Once you have recieved your data, come back here and use the box below to upload it.</li>
+    </ol>
+
+<h3>Upload your listening data</h3>
+
+<p> You will have had several files sent to you. The ones you need to upload will be called <strong>StreamingHistory.json</strong>.
+    These contain a record of all the songs you have listened to. There might be several of these files which are numbered, please 
+    upload them all.
+</p>
+
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
 
