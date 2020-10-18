@@ -1,4 +1,6 @@
 {% extends "dashboard/base.html" %}
+{% load crispy_forms_tags %}
+
 {% block title %}{% block head_title %}Dashboard{% endblock head_title %}{% endblock title %}
 
 {% block content %}
@@ -9,8 +11,9 @@
     {{ form.non_field_errors }}
     {{ form.file_field.errors}}
 
-    {{ form.as_p }}
-    <input type="submit" value="Upload my files">
+    {{ form | crispy }}
+
+    <input type="submit" value="Upload my files" id="datadrop-btn">
 </form>
 
 

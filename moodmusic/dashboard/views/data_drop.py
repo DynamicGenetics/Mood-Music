@@ -35,6 +35,7 @@ class DataDropView(LoginRequiredMixin, SuccessMessageMixin, FormView):
                         messages.WARNING,
                         """Please make sure you are uploading a file ending in .json""",
                     )
+                    return self.form_invalid(form)
                 # Then try and catch for errors in the json
                 try:
                     handle_uploaded_file(f, request.user)
