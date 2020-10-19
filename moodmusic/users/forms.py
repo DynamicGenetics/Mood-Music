@@ -1,10 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth import get_user_model
-from django.utils.translation import ugettext_lazy as _
 from allauth.account.forms import SignupForm
-from phonenumber_field.formfields import PhoneNumberField
-from phonenumber_field.widgets import PhoneNumberPrefixWidget
 
 
 User = get_user_model()
