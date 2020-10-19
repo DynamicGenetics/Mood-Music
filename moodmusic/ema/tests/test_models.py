@@ -77,6 +77,7 @@ class TestSessionState(TestCase):
         next_question = state.get_next_question()
         # Make sure next question is not in the set of already asked questions
         assert state.questions_asked.filter(id=next_question.id).exists() is False
+        assert next_question is not None
 
     def test_get_next_question_none(self):
         """For when there are no more questions to ask
