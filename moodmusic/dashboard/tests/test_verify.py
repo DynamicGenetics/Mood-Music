@@ -1,12 +1,8 @@
-import mock
-import pytest
 from pytest_mock import mocker
 
-from django.conf import settings
 from django.test import TestCase, Client
 
-from moodmusic.dashboard.views import phone_verification, token_validation, verified
-from moodmusic.dashboard.forms import TokenForm
+# from moodmusic.dashboard.views import phone_verification, token_validation, verified
 
 
 class MockVerificationForm:
@@ -81,7 +77,7 @@ class PhoneVerificationTestCase(TestCase):
 
         response = client.post("/verification/token/")
 
-        assert client.session["is_verified"] == True
+        assert client.session["is_verified"] is True
         assert response.status_code == 302
         assert "/verified/" in response.url
 
