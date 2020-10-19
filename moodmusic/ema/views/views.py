@@ -43,8 +43,7 @@ def respond_to_incoming_message(request):
 
         if user.phone_verified is False:
             resp.message(
-                """Please verify your phonenumber through your online
-            dashboard. """
+                """Please verify your phonenumber through your online dashboard."""  # noqa
             )
         else:
             reply = manage_response(user, text, receieved)
@@ -76,7 +75,9 @@ def start_survey_session(request):
     session = EMASession.objects.create()
 
     message = (
-        "Hi, it's time for a survey - please reply within 1 hour. " + question.body
+        "Hi, it's time for a survey - please reply within 1 hour. Rate your"
+        + " agreement with the following statements, where 1=not at all and 10=completely:\n"
+        + question.body
     )
 
     # Set up the Twilio client to send messages

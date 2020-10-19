@@ -11,12 +11,18 @@ from .models import EMASession, EMAResponse, EMAQuestions, SessionState, Questio
 logger = logging.getLogger(__name__)
 
 AUTO_MESSAGE = {
-    "no_active_session": """There is not a survey running at the moment.
-    We will message you the next time that we have questions for you.""",
-    "message_invalid": """Sorry, we can only recieve messages that contain a
-    whole number from 0 to 10. Please send your response again. """,
-    "thanks": """Thank you! You have completed the survey and there are no
-    more questions for you to answer.""",
+    "no_active_session": (
+        "There is not a survey running at the moment."
+        + " We will message you the next time that we have questions for you."
+    ),
+    "message_invalid": (
+        "Sorry, we can only recieve messages that contain a"
+        + " whole number from 1 to 10. Please send your response again."
+    ),
+    "thanks": (
+        "Thank you! You have completed the survey and there are no"
+        + " more questions for you to answer."
+    ),
 }
 
 
@@ -64,6 +70,7 @@ def manage_response(user: get_user_model(), text: str, recieved: datetime) -> st
         if is_valid(text):
             save_response(text, state)
             next_message = state.get_next_question()
+            print(next_message)
             if next_message is None:
                 return AUTO_MESSAGE["thanks"]
             else:
@@ -76,9 +83,9 @@ def manage_response(user: get_user_model(), text: str, recieved: datetime) -> st
 
 
 def is_valid(text: str):
-    """Ensures the text only contains a number between 0 and 10
+    """Ensures the text only contains a number between 1 and 10
     """
-    accepted_responses = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
+    accepted_responses = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
 
     if text in accepted_responses:
         return True

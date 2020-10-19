@@ -51,25 +51,18 @@ class SessionState(models.Model):
 
     def get_next_question(self):
         # If they have answered less than than number of questions available
-        if (
-            EMAResponse.objects.filter(state=self).count()
-            < EMAQuestions.objects.all().count()
-        ):
-            all_qs = EMAQuestions.objects.all()
-            answered_qs = self.questions_asked.all()
-            # Get the remaining available questions and choose one.
-            remaining = all_qs.difference(answered_qs)
-            if remaining.count() == 1:
-                return remaining.first()
-            else:
-                try:
-                    random.choice(remaining)
-                except IndexError:
-                    logger.info("Index Error Raised - No more questions to ask")
-                    return None
+        all_qs = EMAQuestions.objects.all()
+        answered_qs = self.questions_asked.all()
+        # Get the remaining available questions and choose one.
+        remaining = all_qs.difference(answered_qs)
+        if remaining.count() == 1:
+            return remaining.first()
         else:
-            logger.info("No more questions to answer")
-            return None
+            try:
+                return random.choice(remaining)
+            except IndexError:
+                logger.info("Index Error Raised - No more questions to ask")
+                return None
 
     def update(self, next_message):
         self.questions_asked.add(
