@@ -11,7 +11,7 @@ from twilio.twiml.messaging_response import MessagingResponse
 from twilio.rest import Client
 
 from .decorators import validate_twilio_request
-from moodmusic.ema.services import manage_response
+from moodmusic.ema.services.ema_response import manage_response
 from moodmusic.ema.models import EMASession, SessionState, EMAQuestion
 
 # Retieve or create a logger instance

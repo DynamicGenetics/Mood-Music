@@ -4,7 +4,7 @@ import random
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 
-from moodmusic.ema.services import (
+from moodmusic.ema.services.ema_response import (
     manage_response,
     is_valid,
     save_response,
