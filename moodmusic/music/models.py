@@ -1,5 +1,4 @@
 from django.contrib.auth import get_user_model
-from django.contrib.postgres.fields import JSONField
 from django.db import models
 
 
@@ -63,6 +62,21 @@ class TrackHistory(models.Model):
     )
     played_at = models.DateTimeField()
     popularity = models.IntegerField()
+    added_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        """If an API call returns previously played songs then we do not want to
+        duplicate them. Unique together ensures a single song, played at a particular
+        time by a particular user is only recorded once.
+        """
+
+        # N.B. UniqueConstraint is replacing unique_together (see docs)
+        constraints = [
+            models.UniqueConstraint(
+                fields=["track", "history", "played_at"], name="listening_record_exists"
+            )
+        ]
 
 
 class FullUserHistory(models.Model):

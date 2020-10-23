@@ -1,58 +1,40 @@
 import os
+import time
+import logging
 import spotipy
-
-
+from social_django.utils import load_strategy
 from spotipy.oauth2 import SpotifyOAuth
 from django.contrib.auth import get_user_model
-from django.utils import timezone
-from datetime import timestamp
-from social_django.models import UserSocialAuth
+from django.core.exceptions import ObjectDoesNotExist
+from django.urls import reverse
 
 from ..models import Artist, Track, UserHistory
+
+logger = logging.getLogger(__name__)
+
+# Auth object should remain consistent for all users and calls
+auth = SpotifyOAuth(
+    client_id=os.environ["SPOTIFY_CLIENT_ID"],
+    client_secret=os.environ["SPOTIFY_CLIENT_SECRET"],
+    scope="user-read-recently-played",
+    redirect_uri=reverse("dashboard:thanks"),
+)
 
 
 def run():
     users = get_user_model().objects.all()
 
     for user in users:
-        save_recent_history(user)
-
-
-# This is adapted from https://github.com/plamere/spotipy/issues/555
-class CustomAuthManager:
-    def __init__(self, user):
-        self.auth = SpotifyOAuth(
-            client_id=os.environ["SPOTIFY_CLIENT_ID"],
-            client_secret=os.environ["SPOTIFY_CLIENT_SECRET"],
-            redirect_uri="http://127.0.0.1:8000/",
-        )
-        self.auth_info = UserSocialAuth.objects.get(user=user).extra_data
-
-    @property
-    def current_token(self):
-        return self._current_token
-
-    @current_token.setter
-    def current_token(self):
-        now = timezone.now()
-
-        current_auth_info = self.auth_info["access_token"]
-        # if no token or token about to expire soon
-        if (
-            not self.current_token
-            or self.current_token["expires_at"] > now.timestamp() + 60
-        ):
-            self.current_token = self.auth.refresh_access_token(
-                self.auth_info["refresh_token"]
+        try:
+            save_recent_history(user)
+        except ObjectDoesNotExist:
+            logger.warning(
+                "No social_auth.usersocialauth record for user: {}".format(user.id)
             )
-
-        return self.current_token["access_token"]
-
-
-spotify = spotipy.Spotify(auth_manager=CustomAuthManager(keys))
+            pass
 
 
-def save_recent_history(sp: spotipy.Spotify, user: get_user_model()):
+def save_recent_history(user: get_user_model()):
     """Given a recent play history json object, save the relevant
     data into the database.
 
@@ -63,21 +45,42 @@ def save_recent_history(sp: spotipy.Spotify, user: get_user_model()):
     """
 
     # Get the user's authentication token
+    social = user.social_auth.get(provider="spotify")  # Python Social Auth
+    access_token = social.get_access_token(load_strategy())  # Python Social Auth
+    sp = spotipy.Spotify(auth=access_token)  # Spotipy
+
     try:
-        user_auth = UserSocialAuth.objects.get(user=user).extra_data["access_token"]
-        sp = spotipy.Spotify(auth=user_auth)
-    except spotipy.exceptions.SpotifyException:
-        sp = SpotifyOAuth(
-            client_id=os.environ["SPOTIFY_CLIENT_ID"],
-            client_secret=os.environ["SPOTIFY_CLIENT_SECRET"],
-            scope="user-read-recently-played",
-            redirect_uri="http://127.0.0.1:8000/",
-        )
-
-    sp = spotipy.Spotify(auth=user_auth)
-
-    # Get the user's recent history as a json object
-    history = sp.current_user_recently_played()
+        # Get the user's recent history as a json object
+        history = sp.current_user_recently_played()
+    except spotipy.SpotifyException as e:
+        if e.http_status == 429:
+            logger.warning("Rate Limit error receieved (HTTP Status 429). Waiting...")
+            time.sleep(int(e.msg["Retry-After"]))
+            history = sp.current_user_recently_played()
+        elif e.http_status == 401:
+            logger.info(
+                "Access token expired for user {}. Refreshing now...".format(user.id)
+            )
+            social.refresh_token(load_strategy())
+            access_token = social.get_access_token(load_strategy())
+            sp = spotipy.Spotify(auth=access_token)  # Recreate the Spotify auth obj.
+            history = (
+                sp.current_user_recently_played()
+            )  # Try getting the history again.
+            logger.info(
+                "Access token refreshed for user {}, and history retrieved.".format(
+                    user.id
+                )
+            )
+        else:
+            logger.warning(
+                "Unknown error recieved. HTTP Status: {}. Message: {}.".format(
+                    e.http_status, e.msg
+                )
+            )
+            # Wait 10 seconds and try again, just in case.
+            time.sleep(10)
+            history = sp.current_user_recently_played()
 
     # Initiate the UserHistory object for the user
     userhistory, _created = UserHistory.objects.get_or_create(user=user)
@@ -89,7 +92,14 @@ def save_recent_history(sp: spotipy.Spotify, user: get_user_model()):
             new_track = Track.objects.get(uri=item["track"]["uri"])
         except Track.DoesNotExist:
             # If does not exist, then need to get the song features too
-            features = sp.audio_features(item["track"]["id"])
+            try:
+                features = sp.audio_features(item["track"]["id"])
+            except spotipy.SpotifyException as e:
+                if e.http_status == 429:
+                    time.sleep(
+                        e.msg["Retry-After"] + 1
+                    )  # Reason for +1 here: https://stackoverflow.com/questions/30548073/spotify-web-api-rate-limits
+                    features = sp.audio_features(item["track"]["id"])
 
             # Set up the track object
             new_track = Track(
@@ -129,3 +139,5 @@ def save_recent_history(sp: spotipy.Spotify, user: get_user_model()):
                 "popularity": item["track"]["popularity"],
             },
         )
+
+    logger.info("Listening history saved for user: {}".format(user.id))
