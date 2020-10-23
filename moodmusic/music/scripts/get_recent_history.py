@@ -61,12 +61,17 @@ def save_recent_history(user: get_user_model()):
             logger.info(
                 "Access token expired for user {}. Refreshing now...".format(user.id)
             )
-            social.refresh_access_token(load_strategy())
+            social.refresh_token(load_strategy())
             access_token = social.get_access_token(load_strategy())
             sp = spotipy.Spotify(auth=access_token)  # Recreate the Spotify auth obj.
             history = (
                 sp.current_user_recently_played()
             )  # Try getting the history again.
+            logger.info(
+                "Access token refreshed for user {}, and history retrieved.".format(
+                    user.id
+                )
+            )
         else:
             logger.warning(
                 "Unknown error recieved. HTTP Status: {}. Message: {}.".format(
