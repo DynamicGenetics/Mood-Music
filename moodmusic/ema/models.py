@@ -4,6 +4,8 @@ import logging
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.utils import timezone
+from django.core.validators import MaxValueValidator, MinValueValidator
+
 
 logger = logging.getLogger(__name__)
 
@@ -102,3 +104,23 @@ class EMAResponse(models.Model):
     )
     response = models.PositiveSmallIntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
+
+
+class StudyMeta(models.Model):
+    """Information about the EMA study used to generate a schedule."""
+
+    start_time = models.FloatField(
+        validators=[MinValueValidator(0), MaxValueValidator(24)]
+    )
+    end_time = models.FloatField(
+        validators=[MinValueValidator(0), MaxValueValidator(24)]
+    )
+    beeps_per_day = models.PositiveIntegerField()
+    start_date = models.DateField()
+    end_date = models.DateField()
+    created_at = models.DateTimeField(auto_add=True)
+    updated_at = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def survey_time(self):
+        return self.end_time - self.start_time
