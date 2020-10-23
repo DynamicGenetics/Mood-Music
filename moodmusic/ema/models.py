@@ -118,9 +118,5 @@ class StudyMeta(models.Model):
     beeps_per_day = models.PositiveIntegerField()
     start_date = models.DateField()
     end_date = models.DateField()
-    created_at = models.DateTimeField(auto_add=True)
+    created_at = models.DateTimeField(auto_now=True)
     updated_at = models.DateTimeField(auto_now_add=True)
-
-    @property
-    def survey_time(self):
-        return self.end_time - self.start_time
