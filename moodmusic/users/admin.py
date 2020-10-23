@@ -7,10 +7,9 @@ from moodmusic.users.forms import UserChangeForm
 User = get_user_model()
 
 
-# @admin.register(User)
-# class UserAdmin(auth_admin.UserAdmin):
-
-#     form = UserChangeForm
-#     fieldsets = (("User", {"fields": ("name",)}),) + auth_admin.UserAdmin.fieldsets
-#     list_display = ["name", "is_superuser"]
-#     search_fields = ["name"]
+@admin.register(User)
+class UserAdmin(auth_admin.UserAdmin):
+    form = UserChangeForm
+    fieldsets = (("User", {"fields": ("name",)}),) + auth_admin.UserAdmin.fieldsets
+    list_display = ["name", "is_superuser", "consent_granted", "phone_verified"]
+    search_fields = ["name"]
