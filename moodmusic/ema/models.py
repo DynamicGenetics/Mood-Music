@@ -10,7 +10,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 logger = logging.getLogger(__name__)
 
 
-class EMAQuestion(models.Model):
+class EMAQuestions(models.Model):
     short_name = models.CharField(max_length=50)
     body = models.CharField(max_length=160)  # 160 is number of allowed chars in an SMS
 
@@ -49,11 +49,11 @@ class SessionState(models.Model):
 
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     session = models.ForeignKey(EMASession, on_delete=models.CASCADE)
-    questions_asked = models.ManyToManyField(EMAQuestion, through="QuestionHistory")
+    questions_asked = models.ManyToManyField(EMAQuestions, through="QuestionHistory")
 
     def get_next_question(self):
         # If they have answered less than than number of questions available
-        all_qs = EMAQuestion.objects.all()
+        all_qs = EMAQuestions.objects.all()
         answered_qs = self.questions_asked.all()
         # Get the remaining available questions and choose one.
         remaining = all_qs.difference(answered_qs)
@@ -81,7 +81,7 @@ class QuestionHistory(models.Model):
     """
 
     state = models.ForeignKey(SessionState, on_delete=models.CASCADE)
-    question = models.ForeignKey(EMAQuestion, on_delete=models.CASCADE)
+    question = models.ForeignKey(EMAQuestions, on_delete=models.CASCADE)
     time_asked = models.DateTimeField(auto_now_add=True)
 
     @classmethod
@@ -100,7 +100,7 @@ class EMAResponse(models.Model):
         SessionState, on_delete=models.CASCADE, related_name="ema_responses"
     )
     question = models.ForeignKey(
-        EMAQuestion, on_delete=models.CASCADE, related_name="ema_responses"
+        EMAQuestions, on_delete=models.CASCADE, related_name="ema_responses"
     )
     response = models.PositiveSmallIntegerField()
     created_at = models.DateTimeField(auto_now_add=True)

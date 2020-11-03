@@ -15,128 +15,50 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name="EMAQuestion",
+            name='EMAQuestions',
             fields=[
-                (
-                    "id",
-                    models.AutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
-                ("short_name", models.CharField(max_length=50)),
-                ("body", models.CharField(max_length=160)),
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('short_name', models.CharField(max_length=50)),
+                ('body', models.CharField(max_length=160)),
             ],
         ),
         migrations.CreateModel(
-            name="EMASession",
+            name='EMASession',
             fields=[
-                (
-                    "id",
-                    models.AutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
-                ("start_time", models.DateTimeField(auto_now_add=True)),
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('start_time', models.DateTimeField(auto_now_add=True)),
             ],
         ),
         migrations.CreateModel(
-            name="QuestionHistory",
+            name='QuestionHistory',
             fields=[
-                (
-                    "id",
-                    models.AutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
-                ("time_asked", models.DateTimeField(auto_now_add=True)),
-                (
-                    "question",
-                    models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE,
-                        to="ema.EMAQuestion",
-                    ),
-                ),
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('time_asked', models.DateTimeField(auto_now_add=True)),
+                ('question', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='ema.EMAQuestions')),
             ],
         ),
         migrations.CreateModel(
-            name="SessionState",
+            name='SessionState',
             fields=[
-                (
-                    "id",
-                    models.AutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
-                (
-                    "questions_asked",
-                    models.ManyToManyField(
-                        through="ema.QuestionHistory", to="ema.EMAQuestion"
-                    ),
-                ),
-                (
-                    "session",
-                    models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE, to="ema.EMASession"
-                    ),
-                ),
-                (
-                    "user",
-                    models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE,
-                        to=settings.AUTH_USER_MODEL,
-                    ),
-                ),
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('questions_asked', models.ManyToManyField(through='ema.QuestionHistory', to='ema.EMAQuestions')),
+                ('session', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='ema.EMASession')),
+                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
         ),
         migrations.AddField(
-            model_name="questionhistory",
-            name="state",
-            field=models.ForeignKey(
-                on_delete=django.db.models.deletion.CASCADE, to="ema.SessionState"
-            ),
+            model_name='questionhistory',
+            name='state',
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='ema.SessionState'),
         ),
         migrations.CreateModel(
-            name="EMAResponse",
+            name='EMAResponse',
             fields=[
-                (
-                    "id",
-                    models.AutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
-                ("response", models.PositiveSmallIntegerField()),
-                ("created_at", models.DateTimeField(auto_now_add=True)),
-                (
-                    "question",
-                    models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE,
-                        related_name="ema_responses",
-                        to="ema.EMAQuestion",
-                    ),
-                ),
-                (
-                    "state",
-                    models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE,
-                        related_name="ema_responses",
-                        to="ema.SessionState",
-                    ),
-                ),
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('response', models.PositiveSmallIntegerField()),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('question', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='ema_responses', to='ema.EMAQuestions')),
+                ('state', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='ema_responses', to='ema.SessionState')),
             ],
         ),
     ]

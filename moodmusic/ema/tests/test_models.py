@@ -10,7 +10,7 @@ from datetime import timedelta
 from freezegun import freeze_time
 
 from moodmusic.ema.models import (
-    EMAQuestion,
+    EMAQuestions,
     EMASession,
     SessionState,
     QuestionHistory,
@@ -45,8 +45,8 @@ class TestEMASession(TestCase):
 class TestSessionState(TestCase):
     def setUp(self):
         # Add two sample questions
-        EMAQuestion.objects.create(short_name="name1", body="Some text")
-        EMAQuestion.objects.create(short_name="name2", body="Some more text")
+        EMAQuestions.objects.create(short_name="name1", body="Some text")
+        EMAQuestions.objects.create(short_name="name2", body="Some more text")
         # Add a pretend person
         user = get_user_model().objects.create()
         # Add a session
@@ -58,7 +58,7 @@ class TestSessionState(TestCase):
         # Get the state we set up
         state = SessionState.objects.all()[0]
         # Get a random choice of EMA question
-        question = random.choice(EMAQuestion.objects.all())
+        question = random.choice(EMAQuestions.objects.all())
         # Add the question to the state
         state.update(question)
         # Get the QuerySet of questions asked in that state, then
@@ -71,7 +71,7 @@ class TestSessionState(TestCase):
         state = SessionState.objects.all()[0]
 
         # Add a random next question to the state
-        question = random.choice(EMAQuestion.objects.all())
+        question = random.choice(EMAQuestions.objects.all())
         state.update(question)
         # Get the next question
         next_question = state.get_next_question()
@@ -85,7 +85,7 @@ class TestSessionState(TestCase):
         state = SessionState.objects.all()[0]
 
         # Add all the questions to the state
-        for question in EMAQuestion.objects.all():
+        for question in EMAQuestions.objects.all():
             state.update(question)
 
         assert state.get_next_question() is None
@@ -97,8 +97,8 @@ class TestSessionState(TestCase):
 class TestQuestionHistory(TestCase):
     def setUp(self):
         # Add two sample questions
-        EMAQuestion.objects.create(short_name="name1", body="Some text")
-        EMAQuestion.objects.create(short_name="name2", body="Some more text")
+        EMAQuestions.objects.create(short_name="name1", body="Some text")
+        EMAQuestions.objects.create(short_name="name2", body="Some more text")
         # Add a pretend person
         user = get_user_model().objects.create()
         # Add a session
@@ -108,7 +108,7 @@ class TestQuestionHistory(TestCase):
 
     def test_last_question(self):
         state = SessionState.objects.get(id=1)
-        question = EMAQuestion.objects.get(short_name="name2")
+        question = EMAQuestions.objects.get(short_name="name2")
         state.update(question)
         last_q = QuestionHistory.last_question(state)
 
@@ -116,9 +116,9 @@ class TestQuestionHistory(TestCase):
 
     def test_questions_asked(self):
         state = SessionState.objects.get(id=1)
-        for question in EMAQuestion.objects.all():
+        for question in EMAQuestions.objects.all():
             state.update(question)
 
         assert (
-            QuestionHistory.questions_asked(state) == EMAQuestion.objects.all().count()
+            QuestionHistory.questions_asked(state) == EMAQuestions.objects.all().count()
         )

@@ -6,13 +6,7 @@ import logging
 from django.contrib.auth import get_user_model
 from datetime import datetime
 
-from moodmusic.ema.models import (
-    EMASession,
-    EMAResponse,
-    EMAQuestion,
-    SessionState,
-    QuestionHistory,
-)
+from .models import EMASession, EMAResponse, EMAQuestions, SessionState, QuestionHistory
 
 logger = logging.getLogger(__name__)
 
@@ -68,7 +62,7 @@ def manage_response(user: get_user_model(), text: str, recieved: datetime) -> st
     text = "".join(e for e in text if e.isalnum())
     answer_expected = (
         EMAResponse.objects.filter(state=state).count()
-        < EMAQuestion.objects.all().count()
+        < EMAQuestions.objects.all().count()
     )
 
     # Main reply logic sequence
