@@ -9,12 +9,7 @@ logger = logging.getLogger(__name__)
 
 @receiver(post_save, sender=StudyMeta)
 def schedule_study(sender, instance, **kwargs):
-    schedule = EMASchedule(
-        instance.start_time,
-        instance.end_time,
-        instance.beeps_per_day,
-        instance.start_date,
-        instance.end_date,
-    )
+    # Generate a schedule and save it to the database.
+    EMASchedule(instance).schedule
     # Holder action, need to work this part out
     logger.info("Schedule generated")
