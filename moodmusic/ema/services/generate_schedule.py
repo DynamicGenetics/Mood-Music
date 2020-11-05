@@ -1,5 +1,5 @@
-from datetime import time, datetime, timedelta
 import random as rnd
+from datetime import time, datetime, timedelta
 
 
 class EMASchedule:

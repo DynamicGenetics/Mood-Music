@@ -11,8 +11,8 @@ from twilio.twiml.messaging_response import MessagingResponse
 from twilio.rest import Client
 
 from .decorators import validate_twilio_request
-from moodmusic.ema.services import manage_response
-from moodmusic.ema.models import EMASession, SessionState, EMAQuestions
+from moodmusic.ema.services.ema_response import manage_response
+from moodmusic.ema.models import EMASession, SessionState, EMAQuestion
 
 # Retieve or create a logger instance
 logger = logging.getLogger(__name__)
@@ -69,7 +69,7 @@ def respond_to_incoming_message(request):
 def start_survey_session(request):
 
     # Get a random question to start with
-    question = random.choice(EMAQuestions.objects.all())
+    question = random.choice(EMAQuestion.objects.all())
 
     # Start an EMA Session that will record an id and start_time
     session = EMASession.objects.create()
