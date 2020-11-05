@@ -11,6 +11,7 @@ from django.urls import reverse
 
 from moodmusic.music.models import Artist, Track, UserHistory
 
+# Retrieve or create a logger instance
 logger = logging.getLogger(__name__)
 
 # Auth object should remain consistent for all users and calls
