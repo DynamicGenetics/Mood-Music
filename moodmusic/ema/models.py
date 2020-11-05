@@ -18,6 +18,8 @@ class EMAQuestion(models.Model):
 class EMASession(models.Model):
     """Data about the EMA session.
 
+    Attributes
+    ----------
     start_time: datetime
         The time and date that this session was initiated
     """
@@ -43,6 +45,8 @@ class SessionState(models.Model):
     """Data about the user's current state in the EMA survey session. There is
     one instance per user per survey session which is updated as they reply.
 
+    Attributes
+    ----------
     questions_asked: EMAQuestion
         The questions the user has been sent.
     """
@@ -95,6 +99,8 @@ class QuestionHistory(models.Model):
 
 
 class EMAResponse(models.Model):
+    """Records the user's response to the EMA question they were asked."""
+
     # Note that the session state model contains both user and session details
     state = models.ForeignKey(
         SessionState, on_delete=models.CASCADE, related_name="ema_responses"
@@ -107,8 +113,27 @@ class EMAResponse(models.Model):
 
 
 class StudyMeta(models.Model):
-    """Information about the EMA study used to generate a schedule."""
+    """Information about the EMA study used to generate a schedule.
 
+    Attributes
+    ----------
+    label: char
+        A short reference name for the study
+    start_time: float
+        A float between 0 and 24, representing 24hr time.
+    end_time: float
+        A float between 0 and 24, representing 24hr time.
+    beeps_per_day: int
+        Number of times users should be surveyed per day.
+    start_date: DateTime
+        The date surveying should start.
+    end_date: DateTme
+        The date (inclusive) that surveying should end.
+    created_at: DateTime
+        The date that this StudyMeta was created.
+    """
+
+    label = models.CharField(verbose_name="Study Label", max_length=260)
     start_time = models.FloatField(
         validators=[MinValueValidator(0), MaxValueValidator(24)]
     )
@@ -119,4 +144,25 @@ class StudyMeta(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
     created_at = models.DateTimeField(auto_now=True)
-    updated_at = models.DateTimeField(auto_now_add=True)
+
+
+class SessionTime(models.Model):
+    """The generated times for EMA sessions that is generated from the
+    StudyMeta instance.
+
+    Attributes
+    ----------
+    study: StudyMeta
+        Which study object this time is related to.
+    datetime: DateTime
+        The datetime that the EMA session will occur
+    day: int
+        The day of the survey period (starts from 1)
+    beep: int
+        The numbered survey occurence that day (starts from 1)
+    """
+
+    study = models.ForeignKey(StudyMeta, on_delete=models.CASCADE)
+    datetime = models.DateTimeField()
+    day = models.PositiveSmallIntegerField()
+    beep = models.PositiveSmallIntegerField()
