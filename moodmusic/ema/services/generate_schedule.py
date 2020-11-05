@@ -1,22 +1,17 @@
 import random as rnd
 from datetime import time, datetime, timedelta
+from moodmusic.ema.models import StudyMeta, SessionTime
 
 
 class EMASchedule:
-    def __init__(
-        self,
-        start_time: float,
-        end_time: float,
-        beeps_per_day: int,
-        start_date: datetime.date,
-        end_date: datetime.date,
-    ):
-        self.start_time = start_time
-        self.end_time = end_time
-        self.beeps_per_day = beeps_per_day
-        self.start_date = start_date
-        self.end_date = end_date
-        self._survey_time = end_time - start_time
+    def __init__(self, StudyMeta: StudyMeta):
+        self.StudyMeta = StudyMeta
+        self.start_time = StudyMeta.start_time
+        self.end_time = StudyMeta.end_time
+        self.beeps_per_day = StudyMeta.beeps_per_day
+        self.start_date = StudyMeta.start_date
+        self.end_date = StudyMeta.end_date
+        self._survey_time = self.end_time - self.start_time
 
     def _intervals(self) -> list:
         """Method that produces a list of tuples where each tuple is an
@@ -95,12 +90,20 @@ class EMASchedule:
 
         # Set up initial variables
         one_day = timedelta(days=1)
-        schedule = []
         date = self.start_date
-
+        day = 1
         # For each date in the range, create a daily schedule dict and add it to list
         while date <= self.end_date:
-            schedule.append(self._daily_schedule(date))
+            schedule = self._daily_schedule(date)
+
+            for beep in schedule:
+                SessionTime(
+                    study=self.StudyMeta, datetime=schedule[beep], day=day, beep=beep
+                ).create()
+
+            # Increase the day counter
+            day += 1
+            # Increase the date by one day
             date += one_day
 
         return schedule
