@@ -73,7 +73,6 @@ THIRD_PARTY_APPS = [
     "allauth.account",
     "allauth.socialaccount",
     "bootstrapform",
-    "survey",
     "social_django",
     "django_extensions",
     "phonenumber_field",
