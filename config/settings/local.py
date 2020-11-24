@@ -51,11 +51,6 @@ DEBUG_TOOLBAR_CONFIG = {
 INTERNAL_IPS = ["127.0.0.1", "10.0.2.2"]
 
 
-# Celery
-# ------------------------------------------------------------------------------
-# http://docs.celeryproject.org/en/latest/userguide/configuration.html#task-eager-propagates
-CELERY_TASK_EAGER_PROPAGATES = True
-
 # ND: 18.08.2020 Removed this because I need Django Extensions to run my standalone scripts
 # # django-extensions
 # # ------------------------------------------------------------------------------
