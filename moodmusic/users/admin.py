@@ -10,6 +10,6 @@ User = get_user_model()
 @admin.register(User)
 class UserAdmin(auth_admin.UserAdmin):
     form = UserChangeForm
-    fieldsets = (("User", {"fields": ("name",)}),) + auth_admin.UserAdmin.fieldsets
-    list_display = ["name", "is_superuser", "consent_granted", "phone_verified"]
-    search_fields = ["name"]
+    fieldsets = (("User", {"fields": ("email",)}),) + auth_admin.UserAdmin.fieldsets
+    list_display = ["email", "is_superuser", "consent_granted", "phone_verified"]
+    search_fields = ["email"]
