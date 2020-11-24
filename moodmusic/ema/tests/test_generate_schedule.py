@@ -1,6 +1,11 @@
 from moodmusic.ema.services.generate_schedule import EMASchedule
-from django.test import TestCase
+from moodmusic.ema.models import StudyMeta
+
+import hypothesis.strategies as st
+from hypothesis import given
+from hypothesis.extra.django import TestCase
+
 
 class TestEMASchedule(TestCase):
     def test_intervals(self):
-        
+        StudyMeta()
