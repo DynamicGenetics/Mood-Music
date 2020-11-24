@@ -1,4 +1,4 @@
-import random as rnd
+from numpy import random
 from datetime import time, datetime, timedelta
 from moodmusic.ema.models import StudyMeta, SessionTime
 
@@ -48,16 +48,15 @@ class EMASchedule:
 
         # Define an offset value that is no larger than the interval length
         interval_len = self._survey_time / self.beeps_per_day
-        rand_offset = rnd.randrange(0, interval_len * 100) / 100
+        rand_offset = random.uniform(0, interval_len)
 
         # Make a list of scheduled beeps
         for interval in self._intervals():
             # Get a random beep time in the interval
-            # Randrange only works with ints, so *100 first
-            beep_time = rnd.randrange(interval[0] * 100, interval[1] * 100)
+            beep_time = random.uniform(interval[0], interval[1])
             # Now add the random offset, and use modulo to make sure we wrap
             # back to beginning of survey window if it goes outside.
-            beep_time = ((beep_time / 100) + rand_offset) % (self._survey_time)
+            beep_time = (beep_time + rand_offset) % (self._survey_time)
             # Add to the list of beeps, rounded to 2 d.p.
             beeps.append(round(beep_time, 2))
 
