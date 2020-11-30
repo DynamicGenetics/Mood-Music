@@ -1,3 +1,5 @@
+import pytz
+
 from numpy import random
 from datetime import time, datetime, timedelta
 from moodmusic.ema.models import StudyMeta, SessionTime
@@ -69,8 +71,11 @@ class EMASchedule:
         # We're also sorting, as the last item can sometimes be the smallest due to modulo operations
         beeps = sorted(self._generate_beeps())
 
-        # Get the start time for this date.
-        start_datetime = datetime.combine(date, time(hour=self.start_time))
+        # Convert start time to an actual datetime object
+        start_time = time(hour=self.start_time)
+        # Create the starting date and time object for this date (in UTC time)
+        naive_datetime = datetime.combine(date, start_time)
+        start_datetime = naive_datetime.replace(tzinfo=pytz.UTC)
 
         # Intitialise a new list of times
         beep_times = {}
@@ -96,9 +101,9 @@ class EMASchedule:
             schedule = self._daily_schedule(date)
 
             for beep in schedule:
-                SessionTime(
+                SessionTime.objects.create(
                     study=self.StudyMeta, datetime=schedule[beep], day=day, beep=beep
-                ).create()
+                )
 
             # Increase the day counter
             day += 1
