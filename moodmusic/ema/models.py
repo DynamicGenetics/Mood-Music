@@ -1,10 +1,12 @@
 import random
 import logging
+import datetime
 
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.utils import timezone
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.exceptions import ValidationError
 
 
 logger = logging.getLogger(__name__)
@@ -140,10 +142,23 @@ class StudyMeta(models.Model):
     end_time = models.FloatField(
         validators=[MinValueValidator(0), MaxValueValidator(24)]
     )
-    beeps_per_day = models.PositiveIntegerField()
+    beeps_per_day = models.PositiveIntegerField(MaxValueValidator(48))
     start_date = models.DateField()
     end_date = models.DateField()
     created_at = models.DateTimeField(auto_now=True)
+
+    def save(self, *args, **kwargs):
+        # Make sure not scheduling in the past
+        if self.start_date < datetime.date.today():
+            raise ValidationError("The start date cannot be in the past.")
+        # Make sure end date is not before start date.
+        elif self.end_date < self.start_date:
+            raise ValidationError("Start date must be before end date.")
+        # Make sure end time is after start time
+        elif self.end_time <= self.start_time:
+            raise ValidationError("End time must be after start time.")
+
+        super(StudyMeta, self).save(*args, **kwargs)
 
 
 class SessionTime(models.Model):
