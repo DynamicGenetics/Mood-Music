@@ -76,6 +76,7 @@ THIRD_PARTY_APPS = [
     "social_django",
     "django_extensions",
     "phonenumber_field",
+    "django_apscheduler",
 ]
 
 LOCAL_APPS = [
