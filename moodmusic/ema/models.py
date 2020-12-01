@@ -177,7 +177,9 @@ class SessionTime(models.Model):
         The numbered survey occurence that day (starts from 1)
     """
 
-    study = models.ForeignKey(StudyMeta, on_delete=models.CASCADE)
+    study = models.ForeignKey(
+        StudyMeta, on_delete=models.CASCADE, related_name="session_times"
+    )
     datetime = models.DateTimeField()
     day = models.PositiveSmallIntegerField()
     beep = models.PositiveSmallIntegerField()
