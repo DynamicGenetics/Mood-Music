@@ -1,3 +1,20 @@
+"""Module containing the EMASchedule class.
+
+:Notes:
+The EMASchedule class can be used to generate a complete EMASchedule, based on the parameters provided in a StudyMeta
+object.
+The schedule generated is pseudo-random, in that it ensures that questions are asked not too close together, and within
+intervals so that they are spread throughout the day. This ensures that question times are unpredictable, but still
+provide
+good daily coverage. The original algorithm is attributed to `George MacKerron, used for the 'Mappiness' project
+<http://etheses.lse.ac.uk/383/1/Mackerron%20happiness%20and%20environmental%20quality%20%28public%20version%29.pdf>`_
+(p89)
+
+:Example:
+    >>> meta_object = StudyMeya.objects.all().first()
+    >>> EMASchedule(meta_object).schedule
+"""
+
 import pytz
 
 from numpy import random
