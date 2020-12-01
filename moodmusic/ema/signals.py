@@ -9,7 +9,14 @@ logger = logging.getLogger(__name__)
 
 @receiver(post_save, sender=StudyMeta)
 def schedule_study(sender, instance, **kwargs):
-    # Generate a schedule and save it to the database.
+    # First, delete any pre-existing ema times for this study meta
+    if instance.session_times:
+        existing_ema = instance.session_times.all()
+        qs_size = existing_ema.count()
+        existing_ema.delete()
+        logger.info("{} existing EMA session times deleted.".format(qs_size))
+
+    # Regenerate the schedule and save it to the database.
     EMASchedule(instance).schedule
-    # Holder action, need to work this part out
+    # Log
     logger.info("Schedule generated")
