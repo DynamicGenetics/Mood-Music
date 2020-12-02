@@ -46,7 +46,6 @@
           <ul class="navbar-nav mr-auto">
             {% if request.user.is_authenticated %}
               <li class="nav-item">
-                {# URL provided by django-allauth/account/urls.py #}
                 <a id="dashboard-link" class="nav-link" href="{% url 'dashboard:index' %}">{% trans "My Dashboard" %}</a>
               </li>
               <li class="nav-item">
@@ -64,6 +63,15 @@
             {% endif %}
           </ul>
         </div>
+        {% if request.user.is_authenticated %}
+        <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+          <ul class="navbar-nav ml-auto">
+              <li class="nav-item">
+                <p class="navbar-text">Logged in as {{ user.email }}</p>
+              </li>
+          </ul>
+        </div>
+        {% endif %}
       </nav>
 
     </div>
