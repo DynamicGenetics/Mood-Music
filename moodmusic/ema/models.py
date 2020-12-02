@@ -144,11 +144,11 @@ class StudyMeta(models.Model):
     end_time = models.FloatField(
         validators=[MinValueValidator(0), MaxValueValidator(24)]
     )
-    beeps_per_day = models.PositiveIntegerField(valaidators=[MaxValueValidator(10)])
+    beeps_per_day = models.PositiveIntegerField(validators=[MaxValueValidator(10)])
     start_date = models.DateField()
     end_date = models.DateField()
     created_at = models.DateTimeField(auto_now=True)
-    start_scheduler = models.BooleanField()
+    start_scheduler = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         # Make sure not scheduling in the past
