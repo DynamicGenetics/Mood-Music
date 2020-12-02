@@ -315,3 +315,6 @@ SOCIAL_AUTH_SPOTIFY_SCOPE = ["user-read-recently-played", "user-library-read"]
 
 # For PhoneNumberWidget to work
 PHONENUMBER_DEFAULT_REGION = "GB"
+
+# For pre-save user signal
+MAX_USERS = 150
