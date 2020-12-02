@@ -88,8 +88,10 @@ class EMASchedule:
         # We're also sorting, as the last item can sometimes be the smallest due to modulo operations
         beeps = sorted(self._generate_beeps())
 
-        # Convert start time to an actual datetime object
-        start_time = time(hour=self.start_time)
+        # Convert start time to an actual datetime object (to the nearest minute)
+        hours = int(self.start_time)
+        minutes = int((self.start_time * 60) % 60)
+        start_time = time(hour=hours, minute=minutes)
         # Create the starting date and time object for this date (in UTC time)
         naive_datetime = datetime.combine(date, start_time)
         start_datetime = naive_datetime.replace(tzinfo=pytz.UTC)
