@@ -28,8 +28,5 @@ class User(AbstractUser):
 
     objects = CustomUserManager()
 
-    def get_absolute_url(self):
-        return reverse("users:detail", kwargs={"name": self.username})
-
 
 signals.pre_save.connect(random_username, sender=User)
