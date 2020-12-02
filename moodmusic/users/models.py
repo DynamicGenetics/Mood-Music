@@ -1,7 +1,6 @@
 import uuid
 from django.contrib.auth.models import AbstractUser
 from django.db.models import BooleanField, EmailField, signals
-from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from phonenumber_field.modelfields import PhoneNumberField
 
