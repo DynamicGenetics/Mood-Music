@@ -133,6 +133,8 @@ class StudyMeta(models.Model):
         The date (inclusive) that surveying should end.
     created_at: DateTime
         The date that this StudyMeta was created.
+    start_scheduler: Boolean
+        When set to true, the study scheduler will be started.
     """
 
     label = models.CharField(verbose_name="Study Label", max_length=260)
@@ -142,10 +144,11 @@ class StudyMeta(models.Model):
     end_time = models.FloatField(
         validators=[MinValueValidator(0), MaxValueValidator(24)]
     )
-    beeps_per_day = models.PositiveIntegerField(MaxValueValidator(48))
+    beeps_per_day = models.PositiveIntegerField(valaidators=[MaxValueValidator(10)])
     start_date = models.DateField()
     end_date = models.DateField()
     created_at = models.DateTimeField(auto_now=True)
+    start_scheduler = models.BooleanField()
 
     def save(self, *args, **kwargs):
         # Make sure not scheduling in the past
