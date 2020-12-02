@@ -6,8 +6,6 @@
   <div class="container-fluid">
     <h1>Dashboard</h1>
 
-    <p>You are logged in as {{ user.email }} </p>
-
     <p>Welcome to your personal dashboard for the Mood Music study! There are three steps below that you need to complete to begin with.
   
     <p>You can review the Participant Information Sheet at any time by <a href="{% url 'about' %}">clicking on this link.</a>
@@ -46,7 +44,7 @@
                       Before starting we would like you to complete some surveys about your wellbeing and your emotions. These should
                       take no more than 20 minutes.</font-weight-lighter>
                     </p>
-                      <a href="{% url 'dashboard' %}" class="btn btn-primary stretched-link">Do the questionnaires</a>
+                      <a href="{% url 'dashboard:index' %}" class="btn btn-primary stretched-link">Do the questionnaires</a>
                 </div>
             </div>
     </div>
