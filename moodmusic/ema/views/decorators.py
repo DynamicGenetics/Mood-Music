@@ -1,3 +1,11 @@
+"""Decorator for the Twilio webhook that validates incoming requests.
+
+Validation is done by comparing the signature from Twilio recieved in the payload
+with the known authorisation token for the Twilio account being used.
+This will ensure the application will only respond to genuine requests we can be
+sure came from Twilio. 
+"""
+
 from django.conf import settings
 from django.http import HttpResponseForbidden
 from functools import wraps
