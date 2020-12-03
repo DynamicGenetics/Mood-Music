@@ -16,13 +16,6 @@ This Django project is being built as a participant management and data collecti
 The project will integrate with the Twilio and Spotify APIs to send participant questionnaires via SMS, whilst also collecting
 their authorised Spotify data.
 
-
-Useful commands to remember
----------------------------
-
-Creating fixtures after populating database
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-`python manage.py dumpdata --format=json survey.survey survey.category survey.question > "moodmusic/fixtures/survey/survey_init.json"`  
-`python manage.py dumpdata --format=json ema.emaquestions > "moodmusic/fixtures/ema/ema_init.json"`                                              ─╯
-
+To schedule a study create an instance of StudyMeta in the admin panel.
+The parameters set by StudyMeta will trigger the scheduling of all EMA text message tasks, ongoing Spotify user data collection
+and regular evening messages to participants to signpost them to wellbeing services. 
