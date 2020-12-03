@@ -22,7 +22,8 @@
     
 
     <!-- Your stuff: Third-party CSS libraries go here -->
-    
+    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
+
     <!-- This file stores project-specific CSS -->
     
     <link href="{% static 'css/project.css' %}" rel="stylesheet">
@@ -43,20 +44,9 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-              <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'about' %}">About The Study</a>
-            </li>
             {% if request.user.is_authenticated %}
               <li class="nav-item">
-                {# URL provided by django-allauth/account/urls.py #}
-                <a id="dashboard-link" class="nav-link" href="{% url 'dashboard' %}">{% trans "My Dashboard" %}</a>
-              </li>
-              <li class="nav-item">
-                {# URL provided by django-allauth/account/urls.py #}
-                <a class="nav-link" href="{% url 'users:detail' request.user.username  %}">{% trans "My Info" %}</a>
+                <a id="dashboard-link" class="nav-link" href="{% url 'dashboard:index' %}">{% trans "My Dashboard" %}</a>
               </li>
               <li class="nav-item">
                 {# URL provided by django-allauth/account/urls.py #}
@@ -64,8 +54,7 @@
               </li>
             {% else %}
               <li class="nav-item">
-                {# URL provided by django-allauth/account/urls.py #}
-                <a id="sign-up-link" class="nav-link" href="{% url 'account_signup' %}">{% trans "Take Part" %}</a>
+                <a class="nav-link" href="{% url 'about' %}">Study Information</a>
               </li>
               <li class="nav-item">
                 {# URL provided by django-allauth/account/urls.py #}
@@ -74,6 +63,15 @@
             {% endif %}
           </ul>
         </div>
+        {% if request.user.is_authenticated %}
+        <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+          <ul class="navbar-nav ml-auto">
+              <li class="nav-item">
+                <p class="navbar-text">Logged in as {{ user.email }}</p>
+              </li>
+          </ul>
+        </div>
+        {% endif %}
       </nav>
 
     </div>

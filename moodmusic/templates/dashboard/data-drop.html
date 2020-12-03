@@ -1,17 +1,41 @@
 {% extends "dashboard/base.html" %}
+{% load crispy_forms_tags %}
+
 {% block title %}{% block head_title %}Dashboard{% endblock head_title %}{% endblock title %}
 
 {% block content %}
 
-    <div id="drop-area">
-        <form class="my-form">
-        <p>Upload multiple files with the file dialog or by dragging and dropping images onto the dashed region</p>
-        <input type="file" id="fileElem" multiple accept="image/*" onchange="handleFiles(this.files)">
-        <label class="button" for="fileElem">Select some files</label>
-        </form>
-        <progress id="progress-bar" max=100 value=0></progress>
-        <div id="gallery" /></div>
-    </div>
+<h3>How to request your personal data from Spotify</h3>
+
+<p>Spotify allows you to download your personal user data from the 'Privacy Settings' section of your 
+    Spotify account. Here is how to request it: </p>
+    
+    <ol>
+        <li>Go to <a href="https://www.spotify.com/us/account/privacy/" target="_blank">www.spotify.com/us/account/privacy/</a>. 
+            You might need to log in.</li>
+        <li>Go to the bottom of the page to a section called 'Download My Data'.</li>
+        <li>If you follow the instructions then Spotify will email you a link to download
+            you data. This usually happens within 24 hours.</li>
+        <li>Once you have recieved your data, come back here and use the box below to upload it.</li>
+    </ol>
+
+<h3>Upload your listening data</h3>
+
+<p> You will have had several files sent to you. The ones you need to upload will be called <strong>StreamingHistory.json</strong>.
+    These contain a record of all the songs you have listened to. There might be several of these files which are numbered, please 
+    upload them all.
+</p>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    {{ form.non_field_errors }}
+    {{ form.file_field.errors}}
+
+    {{ form | crispy }}
+
+    <input type="submit" value="Upload my files" id="datadrop-btn">
+</form>
 
 
 {% endblock %}

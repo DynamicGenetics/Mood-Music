@@ -1,10 +1,11 @@
 """
 Base settings to build other settings files upon.
 """
-from pathlib import Path
 
-import environ
 import os
+import environ
+
+from pathlib import Path
 
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 # moodmusic/
@@ -65,19 +66,24 @@ DJANGO_APPS = [
     "django.contrib.admin",
     "django.forms",
 ]
+
 THIRD_PARTY_APPS = [
     "crispy_forms",
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
     "bootstrapform",
-    "survey",
     "social_django",
+    "django_extensions",
+    "phonenumber_field",
+    "django_apscheduler",
 ]
 
 LOCAL_APPS = [
     "moodmusic.users.apps.UsersConfig",
     "moodmusic.dashboard.apps.DashboardConfig",
+    "moodmusic.ema.apps.EmaConfig",
+    "moodmusic.music.apps.MusicConfig"
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -99,9 +105,9 @@ AUTHENTICATION_BACKENDS = [
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-user-model
 AUTH_USER_MODEL = "users.User"
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-redirect-url
-LOGIN_REDIRECT_URL = "users:redirect"
+LOGIN_REDIRECT_URL = "/dashboard/"
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-url
-LOGIN_URL = "account_login"
+LOGIN_URL = "/accounts/login/"
 
 # PASSWORDS
 # ------------------------------------------------------------------------------
@@ -261,20 +267,24 @@ LOGGING = {
     "root": {"level": "INFO", "handlers": ["console"]},
 }
 
-
 # django-allauth
 # ------------------------------------------------------------------------------
 ACCOUNT_ALLOW_REGISTRATION = env.bool("DJANGO_ACCOUNT_ALLOW_REGISTRATION", True)
-# https://django-allauth.readthedocs.io/en/latest/configuration.html
-ACCOUNT_AUTHENTICATION_METHOD = "username"
+
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 ACCOUNT_EMAIL_REQUIRED = True
-# https://django-allauth.readthedocs.io/en/latest/configuration.html
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
-# https://django-allauth.readthedocs.io/en/latest/configuration.html
+ACCOUNT_AUTHENTICATION_METHOD = "email"
+
+# Redirects
+ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = "/dashboard/"
+
+# Custom adapters for forms
 ACCOUNT_ADAPTER = "moodmusic.users.adapters.AccountAdapter"
-# https://django-allauth.readthedocs.io/en/latest/configuration.html
-SOCIALACCOUNT_ADAPTER = "moodmusic.users.adapters.SocialAccountAdapter"
+# Customised forms
+ACCOUNT_FORMS = {"signup": "users.forms.CustomSignupForm"}
 
 
 # Social Django App Settings
@@ -282,8 +292,8 @@ SOCIALACCOUNT_ADAPTER = "moodmusic.users.adapters.SocialAccountAdapter"
 SOCIAL_AUTH_URL_NAMESPACE = "social"
 SOCIAL_AUTH_POSTGRES_JSONFIELD = True
 
-LOGIN_URL = "/login/"
-LOGIN_REDIRECT_URL = "/dashboard/thanks"
+# This is going to be a problem...? We have two LOGIN_REDIRECT_URLs
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = "/dashboard/thanks/"
 SOCIAL_AUTH_STRATEGY = "social_django.strategy.DjangoStrategy"
 SOCIAL_AUTH_STORAGE = "social_django.models.DjangoStorage"
 
@@ -299,7 +309,12 @@ SOCIAL_AUTH_PIPELINE = (
     "social_core.pipeline.user.user_details",
 )
 
-SOCIAL_AUTH_SPOTIFY_KEY = "6408ea155e2e4422997d55379a1001a2"
+SOCIAL_AUTH_SPOTIFY_KEY = os.environ["SPOTIFY_CLIENT_ID"]
 SOCIAL_AUTH_SPOTIFY_SECRET = os.environ["SPOTIFY_CLIENT_SECRET"]
 SOCIAL_AUTH_SPOTIFY_SCOPE = ["user-read-recently-played", "user-library-read"]
 
+# For PhoneNumberWidget to work
+PHONENUMBER_DEFAULT_REGION = "GB"
+
+# For pre-save user signal
+MAX_USERS = 150

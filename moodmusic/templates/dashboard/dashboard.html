@@ -5,78 +5,61 @@
 
   <div class="container-fluid">
     <h1>Dashboard</h1>
+
+    <p>Welcome to your personal dashboard for the Mood Music study! There are three steps below that you need to complete to begin with.
+  
+    <p>You can review the Participant Information Sheet at any time by <a href="{% url 'about' %}">clicking on this link.</a>
+       If you have any questions then you can contact <a href="mailto:nina.dicara@bristol.ac.uk">Nina Di Cara</a>.</p>
+      
   </div>
 
-  <br />
-
-  <div class="container-fluid">
-    Welcome to your personal dashboard for the Mood Music study! There are four steps below that we need you to complete to begin with. The fifth step
-    will become available once you have completed the two weeks of surveys.
-    <br />
-    If you have any questions then you can contact <a href="mailto:nina.dicara@bristol.ac.uk">Nina Di Cara</a>.<br>
-  </div>
-
-  <br />
-
-  <!-- This is here as a template to replace the attempt at cards below, which doesn't resolve in the right
-  order on a mobile or tablet. -->
-
-  <div class="container pt-3">
-    <div class="col-sm-10 offset-sm-1">
-        <h4>Research Team</h4>
-        <div class="card-group">
-            <div class="card mb-4">
+  <div class="row">
+    <div class="col-sm-6">
+          <div class="card">
+              <div class="card-body">
+                  <h5 class="card-title">Get Your Daily Surveys</h5>
+                  <p class="card-text"><font-weight-lighter class="text-muted">
+                    Please add and verify your phone number so that you can recieve your text surveys. We will start sending them on DATE.  
+                  </font-weight-lighter></p>
+                  <a href="{% url 'dashboard:mobile_guide' %}" class="btn btn-primary stretched-link">Set up my phone number</a>
+              </div>
+          </div>
+    </div>
+    <div class="col-sm-6">
+          <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Step 1</h5>
+                    <h5 class="card-title">Share Your Spotify Data</h5>
                     <p class="card-text"><font-weight-lighter class="text-muted">
                       To understand how you listen to music we need access to your Spotify listening history.
                     </font-weight-lighter></p>
-                    <a href="{% url 'spotify' %}" class="btn btn-primary" role="button">Connect your Spotify account</a>
+                    <a href="{% url 'dashboard:spotify' %}" class="btn btn-primary stretched-link">Connect my Spotify account</a>
                 </div>
             </div>
-            <div class="card mb-4">
+    </div>
+    <div class="col-sm-6">
+            <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Step 2</h5>
+                    <h5 class="card-title">Tell Us How You Feel</h5>
                     <p class="card-text"><font-weight-lighter class="text-muted">
                       Before starting we would like you to complete some surveys about your wellbeing and your emotions. These should
                       take no more than 20 minutes.</font-weight-lighter>
                     </p>
-                      <a href="{% url 'dashboard' %}" class="btn btn-primary" role="button">Take the surveys</a>
+                      <a href="{% url 'dashboard:index' %}" class="btn btn-primary stretched-link">Do the questionnaires</a>
                 </div>
             </div>
-            <div class="w-100 d-none d-sm-block d-md-none"><!-- wrap every 2 on sm--></div>
-            <div class="card mb-4">
+    </div>
+    <div class="col-sm-6">
+            <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Step 3</h5>
-                    <p class="card-text"><font-weight-lighter class="text-muted">
-                      Your wellbeing surveys will be delivered by text to the number you provided when you signed up. Before you
-                      start please read these guidelines on keeping your mobile phone data safe.</font-weight-lighter>
-                    </p>
-                    <a href="{% url 'mobile_guide' %}" class="btn btn-primary" role="button">Read the guidelines</a>
-                </div>
-            </div>
-            <div class="w-100 d-none d-md-block d-lg-none"><!-- wrap every 3 on md--></div>
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h5 class="card-title">Step 4</h5>
-                    <p class="card-text"><font-weight-lighter class="text-muted">Information</font-weight-lighter></p>
-                </div>
-            </div>
-            <div class="w-100 d-none d-sm-block d-md-none"><!-- wrap every 2 on sm--></div>
-            <div class="w-100 d-none d-lg-block d-xl-none"><!-- wrap every 4 on lg--></div>
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h5 class="card-title">Step 5</h5>
+                    <h5 class="card-title">Download Your Spotify User Data</h5>
                     <p class="card-text"><font-weight-lighter class="text-muted">
                       Once the two weeks of surveys has finished you will be asked to request your data from Spotify. Here you
                       will find instructions and the upload box.
                     </font-weight-lighter></p>
-                    <a href="{% url 'datadrop' %}" class="btn btn-primary" role="button">Spotify Data Upload</a>
+                    <a href="{% url 'dashboard:datadrop' %}" class="btn btn-primary stretched-link">Upload my Spotify data</a>
                 </div>
-            </div>
-        </div>
+          </div>
     </div>
-
 </div>
 
 

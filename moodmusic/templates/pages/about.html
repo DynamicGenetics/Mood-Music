@@ -3,7 +3,6 @@
 {% block content %}
 
     <div class="container">
-        <div class="col-sm-10 offset-sm-1">
             <div class="page-header">
                 <h1>Study Information</h1>
             </div>
@@ -16,10 +15,6 @@
                 If you are interested, then read this page. You can click ‘Take Part’ at the bottom if you still want to be involved.
                 If you have any questions you can ask <a href="mailto:nina.dicara@bristol.ac.uk">Nina</a>.
             </p>
-        </div>
-    </div>
-
-
-
-    <a href="#" class="btn btn-lg btn-primary">Take Part</a>
+    </div>    
+    <a href="{% url 'account_signup' %}" class="btn btn-success float-md-right">Yes, I'd like to take part</a>
 {% endblock content %}

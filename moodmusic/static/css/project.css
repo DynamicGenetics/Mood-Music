@@ -11,3 +11,30 @@
   background-color: #f2dede;
   border-color: #eed3d7;
 }
+
+/* Home Page CSS */
+
+body.home {
+  background: url("../images/homepage.png") no-repeat center center fixed;
+  background-size: 90%;
+  background-position-y: 80%; 
+}
+
+.home-text {
+  padding-top: 170px;
+}
+
+h1 {
+  font-family: 'Permanent Marker', cursive;
+  padding-top: 5%;
+  padding-bottom: 20px;
+}
+
+p {
+  padding-top: 10px ;
+  padding-bottom: 5px;
+}
+
+.btn {
+  margin: 15px 15px 15px 0px;
+}

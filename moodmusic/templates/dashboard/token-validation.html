@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% block container %}
+  <form role="form" method="POST">
+    {% csrf_token %}
+
+    {{ form.non_field_errors }}
+    {{ form.token.errors}}
+
+    {{ form.token }}
+    <input type="submit" value="Verify Phone" class="btn btn-info">
+  </form>
+
+  <a href="{% url 'dashboard:phone_verification' %}" class="btn btn-secondary" role="button">Go back and change my phone number</a>
+
+{% endblock %}
+
+{% endblock %}

@@ -1,0 +1,70 @@
+name: Testing
+
+env:
+  # Postgres variables
+  POSTGRES_HOST: localhost
+  POSTGRES_PORT: 5432
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: postgres
+  #API keys
+  SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
+  SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_SECRET_ID }}
+  TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
+  TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+
+on:
+  push:
+    branches:
+    - 'feature/**' # Runs workflow everyone time code is pushed to repo
+    paths-ignore:
+    - 'docs/**' # Will not run for anything pushed to docs
+  pull_request:
+    branches:
+    # Also runs on any pull request to main or develop branches 
+    - main 
+    - develop
+
+jobs:
+
+  runner-job:
+
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: [3.8]
+
+    services:
+      postgres: 
+        image: postgres:12.3
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: github_actions
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - '5432:5432'
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements/local.txt
+
+    - name: Database Migrations
+      run: python manage.py migrate
+
+    - name: Run Tests
+      run: |
+        pytest

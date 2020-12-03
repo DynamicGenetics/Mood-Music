@@ -1,6 +1,9 @@
 ## ND Additions
 .vscode/
-
+.idea
+example-data/
+secrets.py
+.cache-ninaheather
 
 ### Python template
 # Byte-compiled / optimized / DLL files
@@ -275,7 +278,6 @@ tags
 [Ii]nclude
 [Ll]ib
 [Ll]ib64
-[Ss]cripts
 pyvenv.cfg
 pip-selfcheck.json
 .env
