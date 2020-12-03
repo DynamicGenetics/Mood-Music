@@ -15,7 +15,7 @@ def meta(draw):
     """
     # Strategies for the data types needed
     dates = st.dates(min_value=datetime.date.today())
-    times = st.integers(min_value=0, max_value=24)
+    times = st.floats(min_value=0, max_value=24)
     beeps = st.integers(min_value=1, max_value=10)
     days = st.integers(min_value=1, max_value=200)
     labels = st.text(alphabet=st.characters(blacklist_categories=("Cc", "Cs")))
@@ -71,4 +71,3 @@ class TestEMASchedule(TestCase):
 
 #     def test_objects(self):
 #         # Test that the right number of objects were entered into the database
-
