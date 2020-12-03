@@ -9,7 +9,6 @@ from django.test import TestCase
 from moodmusic.dashboard.views.data_drop import (
     validate_ext,
     handle_uploaded_file,
-    save_music_history,
     DataDropView,
 )
 from moodmusic.music.models import FullUserHistory
