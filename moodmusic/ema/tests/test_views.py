@@ -1,9 +1,7 @@
-import os
-
 from django.urls import reverse
 from django.test import TestCase
 
-from moodmusic.ema.views.views import respond_to_incoming_message, start_survey_session
+# from moodmusic.ema.views.views import respond_to_incoming_message
 
 # https://www.twilio.com/docs/iam/test-credentials
 
@@ -29,16 +27,3 @@ class TestRespondToMessage(TestCase):
     #         reverse("ema"), {"Body": "", "From": "+445670123456"}
     #     )
     #     assert response.status_code == 401
-
-
-# class TestStartSession(TestCase):
-#     def setUp(self):
-#         pass
-
-#     def test_start_session(self):
-#         # Test that session has been started with the correct time etc,
-#         # and that the Twilio number is sent a message.
-#         pass
-
-#     def test_start_session_invalid_number(self):
-#         pass
