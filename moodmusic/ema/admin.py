@@ -1,3 +1,5 @@
 from django.contrib import admin
+from .models import EMAQuestion, StudyMeta
 
-# Register your models here.
+admin.site.register(EMAQuestion)
+admin.site.register(StudyMeta)

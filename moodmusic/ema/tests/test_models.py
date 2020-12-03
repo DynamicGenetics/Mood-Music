@@ -1,19 +1,24 @@
 import random
+import pytest
 
 import hypothesis.strategies as st
 from hypothesis import given
 from hypothesis.extra.django import TestCase
 
+from django.db.models import signals
 from django.contrib.auth import get_user_model
 from django.utils import timezone
-from datetime import timedelta
+from django.core.exceptions import ValidationError
+
+from datetime import timedelta, date
 from freezegun import freeze_time
 
 from moodmusic.ema.models import (
-    EMAQuestions,
+    EMAQuestion,
     EMASession,
     SessionState,
     QuestionHistory,
+    StudyMeta,
 )
 
 
@@ -45,8 +50,8 @@ class TestEMASession(TestCase):
 class TestSessionState(TestCase):
     def setUp(self):
         # Add two sample questions
-        EMAQuestions.objects.create(short_name="name1", body="Some text")
-        EMAQuestions.objects.create(short_name="name2", body="Some more text")
+        EMAQuestion.objects.create(short_name="name1", body="Some text")
+        EMAQuestion.objects.create(short_name="name2", body="Some more text")
         # Add a pretend person
         user = get_user_model().objects.create()
         # Add a session
@@ -58,7 +63,7 @@ class TestSessionState(TestCase):
         # Get the state we set up
         state = SessionState.objects.all()[0]
         # Get a random choice of EMA question
-        question = random.choice(EMAQuestions.objects.all())
+        question = random.choice(EMAQuestion.objects.all())
         # Add the question to the state
         state.update(question)
         # Get the QuerySet of questions asked in that state, then
@@ -71,7 +76,7 @@ class TestSessionState(TestCase):
         state = SessionState.objects.all()[0]
 
         # Add a random next question to the state
-        question = random.choice(EMAQuestions.objects.all())
+        question = random.choice(EMAQuestion.objects.all())
         state.update(question)
         # Get the next question
         next_question = state.get_next_question()
@@ -85,7 +90,7 @@ class TestSessionState(TestCase):
         state = SessionState.objects.all()[0]
 
         # Add all the questions to the state
-        for question in EMAQuestions.objects.all():
+        for question in EMAQuestion.objects.all():
             state.update(question)
 
         assert state.get_next_question() is None
@@ -97,8 +102,8 @@ class TestSessionState(TestCase):
 class TestQuestionHistory(TestCase):
     def setUp(self):
         # Add two sample questions
-        EMAQuestions.objects.create(short_name="name1", body="Some text")
-        EMAQuestions.objects.create(short_name="name2", body="Some more text")
+        EMAQuestion.objects.create(short_name="name1", body="Some text")
+        EMAQuestion.objects.create(short_name="name2", body="Some more text")
         # Add a pretend person
         user = get_user_model().objects.create()
         # Add a session
@@ -108,7 +113,7 @@ class TestQuestionHistory(TestCase):
 
     def test_last_question(self):
         state = SessionState.objects.get(id=1)
-        question = EMAQuestions.objects.get(short_name="name2")
+        question = EMAQuestion.objects.get(short_name="name2")
         state.update(question)
         last_q = QuestionHistory.last_question(state)
 
@@ -116,9 +121,42 @@ class TestQuestionHistory(TestCase):
 
     def test_questions_asked(self):
         state = SessionState.objects.get(id=1)
-        for question in EMAQuestions.objects.all():
+        for question in EMAQuestion.objects.all():
             state.update(question)
 
         assert (
-            QuestionHistory.questions_asked(state) == EMAQuestions.objects.all().count()
+            QuestionHistory.questions_asked(state) == EMAQuestion.objects.all().count()
         )
+
+
+class TestStudyMeta(TestCase):
+    def setUp(self):
+        # Make sure we don't trigger the scheduler
+        signals.post_save.disconnect(StudyMeta)
+
+    def test_dates(self):
+        """Check save method prevents dates in wrong order"""
+        # Start date cannot be in the past
+        with pytest.raises(ValidationError):
+            StudyMeta.objects.create(
+                start_date=date.today() - timedelta(days=1),
+                end_date=date.today() + timedelta(days=1),
+            )
+
+        # Start date must not be before end date
+        with pytest.raises(ValidationError):
+            StudyMeta.objects.create(
+                start_date=date.today() + timedelta(days=10),
+                end_date=date.today() + timedelta(days=9),
+            )
+
+    def test_times(self):
+        """Check save methods prevents times in wrong order"""
+        # Start time cannot be before the end time
+        with pytest.raises(ValidationError):
+            StudyMeta.objects.create(
+                start_date=date.today(),
+                end_date=date.today() + timedelta(days=5),
+                start_time=6,
+                end_time=5,
+            )

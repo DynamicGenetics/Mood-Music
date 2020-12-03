@@ -16,16 +16,18 @@ django-model-utils==4.0.0  # https://github.com/jazzband/django-model-utils
 django-allauth==0.41.0  # https://github.com/pennersr/django-allauth
 django-crispy-forms==1.9.0  # https://github.com/django-crispy-forms/django-crispy-forms
 django-redis==4.11.0  # https://github.com/jazzband/django-redis
+django-bootstrap-form==3.4 # https://github.com/tzangms/django-bootstrap-form
 
 # Third Party Apps for EMA and Music modules
 # ------------------------------------------------------------------------------
-django-survey-and-report # https://github.com/Pierre-Sassoulas/django-survey
 social-auth-app-django==3.1.0 # https://github.com/python-social-auth/social-app-django
 social-auth-core[openidconnect]==2.0.0
 spotipy==2.13.0
 django-phonenumber-field==5.0.0
 phonenumbers==8.12.8
+django-apscheduler==0.5.1 # https://github.com/jarekwg/django-apscheduler
 
-# Twilio Specific Apps
+# Other/Utilities
 # ------------------------------------------------------------------------------
+numpy==1.18.4
 twilio==6.45.0

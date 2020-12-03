@@ -4,13 +4,13 @@ import random
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 
-from moodmusic.ema.services import (
+from moodmusic.ema.services.ema_response import (
     manage_response,
     is_valid,
     save_response,
     AUTO_MESSAGE,
 )
-from moodmusic.ema.models import SessionState, EMAQuestions, EMAResponse
+from moodmusic.ema.models import SessionState, EMAQuestion, EMAResponse
 from moodmusic.ema.tests.test_models import create_EMASession
 
 
@@ -22,8 +22,8 @@ def test_is_valid(input, expected):
 class TestManageResponse(TestCase):
     def setUp(self):
         # Add two questions
-        EMAQuestions.objects.create(short_name="name1", body="Some text")
-        EMAQuestions.objects.create(short_name="name2", body="Some more text")
+        EMAQuestion.objects.create(short_name="name1", body="Some text")
+        EMAQuestion.objects.create(short_name="name2", body="Some more text")
 
     def test_no_sessions_exist(self):
         """For when there are no sessions in the database.
@@ -58,7 +58,7 @@ class TestManageResponse(TestCase):
         session = create_EMASession(5)
         user = get_user_model().objects.create(phone_number="549")
         state = SessionState.objects.create(user=user, session=session)
-        first_question = random.choice(EMAQuestions.objects.all())
+        first_question = random.choice(EMAQuestion.objects.all())
         state.update(first_question)
         next_question = state.get_next_question()
         state.update(next_question)
@@ -73,7 +73,7 @@ class TestManageResponse(TestCase):
         session = create_EMASession(5)
         user = get_user_model().objects.create(phone_number="549")
         state = SessionState.objects.create(user=user, session=session)
-        first_question = random.choice(EMAQuestions.objects.all())
+        first_question = random.choice(EMAQuestion.objects.all())
         state.update(first_question)
 
         # Assume one question already sent
@@ -81,7 +81,7 @@ class TestManageResponse(TestCase):
 
         # Get all the potential questions
         possible_qs = []
-        for question in EMAQuestions.objects.all():
+        for question in EMAQuestion.objects.all():
             possible_qs.append(question.body)
         # Make sure the next question returned is one of the questions.
         assert reply in possible_qs
@@ -91,7 +91,7 @@ class TestManageResponse(TestCase):
         session = create_EMASession(5)
         user = get_user_model().objects.create(phone_number="")
         state = SessionState.objects.create(user=user, session=session)
-        question = random.choice(EMAQuestions.objects.all())
+        question = random.choice(EMAQuestion.objects.all())
         state.update(question)
         # Try to save the response
         save_response("8", state)

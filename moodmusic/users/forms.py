@@ -76,17 +76,14 @@ class CustomSignupForm(SignupForm):
         label="""I give my full consent for taking part in this research study.""",
     )
 
-    name = forms.CharField(max_length=30, label="Full Name")
-
     # Specify the first couple of fields in this order. This appear at the top,
     # and then any unspecified fields are below.
-    field_order = ["name", "email", "password1", "password2"]
+    field_order = ["email", "password1", "password2"]
 
     def save(self, request):
         # Instructions https://django-allauth.readthedocs.io/en/latest/forms.html
         user = super(CustomSignupForm, self).save(request)
 
-        user.name = self.cleaned_data["name"]
         # Note that email is saved through adapters.py to restrict non bristol addresses
         user.email = self.cleaned_data["email"]
         user.consent_granted = self.cleaned_data["consent_granted"]

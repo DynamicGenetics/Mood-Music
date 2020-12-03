@@ -4,12 +4,14 @@ import logging
 import spotipy
 from social_django.utils import load_strategy
 from spotipy.oauth2 import SpotifyOAuth
+from django.core.management.base import BaseCommand
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 
-from ..models import Artist, Track, UserHistory
+from moodmusic.music.models import Artist, Track, UserHistory
 
+# Retrieve or create a logger instance
 logger = logging.getLogger(__name__)
 
 # Auth object should remain consistent for all users and calls
@@ -21,17 +23,35 @@ auth = SpotifyOAuth(
 )
 
 
-def run():
-    users = get_user_model().objects.all()
+class Command(BaseCommand):
+    help = "Collects the recent Spotify listening history for all users."
 
-    for user in users:
-        try:
-            save_recent_history(user)
-        except ObjectDoesNotExist:
-            logger.warning(
-                "No social_auth.usersocialauth record for user: {}".format(user.id)
+    def handle(self, *args, **options):
+        # Record start time
+        start = time.time()
+        # Init counter
+        n = 0
+        # Get list of users
+        users = get_user_model().objects.all()
+        # Iterate through users and try to get their history
+        for user in users:
+            try:
+                save_recent_history(user)
+                n += 1
+            except ObjectDoesNotExist:
+                # Except instance where the user has not linked their Spotify account
+                logger.warning(
+                    "No social_auth.usersocialauth record for user: {}".format(user.id)
+                )
+                pass
+        # Record end time and log info
+        end = time.time()
+        total_time = end - start
+        logger.info(
+            "Listening history collected for {} users in {} seconds.".format(
+                n, total_time
             )
-            pass
+        )
 
 
 def save_recent_history(user: get_user_model()):
