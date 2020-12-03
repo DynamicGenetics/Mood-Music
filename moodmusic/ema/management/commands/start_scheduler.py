@@ -69,7 +69,7 @@ class Command(BaseCommand):
     help = "Runs apscheduler."
 
     def handle(self, *args, **options):
-        scheduler = BackgroundScheduler(timezone=settings.TIME_ZONE)
+        scheduler = BackgroundScheduler(timezone=settings.TIME_ZONE, id="main")
         scheduler.add_jobstore(DjangoJobStore(), "default")
 
         # Get the start and end dates from StudyMeta - assumes there is only one StudyMeta object.
