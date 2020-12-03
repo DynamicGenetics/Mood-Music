@@ -4,3 +4,5 @@ scanner:
 
 flake8:
     max-line-length: 119  # Default is 79 in PEP 8
+    ignore:  # Errors and warnings to ignore
+        - W504  # line break after binary operator
