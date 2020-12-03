@@ -27,6 +27,7 @@ django-phonenumber-field==5.0.0
 phonenumbers==8.12.8
 django-apscheduler==0.5.1 # https://github.com/jarekwg/django-apscheduler
 
-# Twilio Specific Apps
+# Other/Utilities
 # ------------------------------------------------------------------------------
+numpy==1.18.4
 twilio==6.45.0
