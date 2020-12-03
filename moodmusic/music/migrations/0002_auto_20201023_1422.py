@@ -7,23 +7,27 @@ import django.utils.timezone
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('music', '0001_initial'),
+        ("music", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='trackhistory',
-            name='added_at',
-            field=models.DateTimeField(auto_now_add=True, default=django.utils.timezone.now),
+            model_name="trackhistory",
+            name="added_at",
+            field=models.DateTimeField(
+                auto_now_add=True, default=django.utils.timezone.now
+            ),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='trackhistory',
-            name='updated_at',
+            model_name="trackhistory",
+            name="updated_at",
             field=models.DateTimeField(auto_now=True),
         ),
         migrations.AddConstraint(
-            model_name='trackhistory',
-            constraint=models.UniqueConstraint(fields=('track', 'history', 'played_at'), name='listening_record_exists'),
+            model_name="trackhistory",
+            constraint=models.UniqueConstraint(
+                fields=("track", "history", "played_at"), name="listening_record_exists"
+            ),
         ),
     ]

@@ -7,28 +7,40 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('ema', '0003_auto_20201103_1500'),
+        ("ema", "0003_auto_20201103_1500"),
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='studymeta',
-            name='updated_at',
-        ),
+        migrations.RemoveField(model_name="studymeta", name="updated_at",),
         migrations.AddField(
-            model_name='studymeta',
-            name='label',
-            field=models.CharField(default='default', max_length=260, verbose_name='Study Label'),
+            model_name="studymeta",
+            name="label",
+            field=models.CharField(
+                default="default", max_length=260, verbose_name="Study Label"
+            ),
             preserve_default=False,
         ),
         migrations.CreateModel(
-            name='SessionTime',
+            name="SessionTime",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('datetime', models.DateTimeField()),
-                ('day', models.PositiveSmallIntegerField()),
-                ('beep', models.PositiveSmallIntegerField()),
-                ('study', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='ema.StudyMeta')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("datetime", models.DateTimeField()),
+                ("day", models.PositiveSmallIntegerField()),
+                ("beep", models.PositiveSmallIntegerField()),
+                (
+                    "study",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="ema.StudyMeta"
+                    ),
+                ),
             ],
         ),
     ]

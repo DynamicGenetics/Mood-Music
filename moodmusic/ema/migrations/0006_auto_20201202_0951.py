@@ -7,18 +7,20 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('ema', '0005_auto_20201201_1505'),
+        ("ema", "0005_auto_20201201_1505"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='studymeta',
-            name='start_scheduler',
+            model_name="studymeta",
+            name="start_scheduler",
             field=models.BooleanField(default=False),
         ),
         migrations.AlterField(
-            model_name='studymeta',
-            name='beeps_per_day',
-            field=models.PositiveIntegerField(validators=[django.core.validators.MaxValueValidator(10)]),
+            model_name="studymeta",
+            name="beeps_per_day",
+            field=models.PositiveIntegerField(
+                validators=[django.core.validators.MaxValueValidator(10)]
+            ),
         ),
     ]
