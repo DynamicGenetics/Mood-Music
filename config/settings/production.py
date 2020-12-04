@@ -10,10 +10,6 @@ SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 # ND 4.12.2020 https://github.com/Azure-Samples/djangoapp/blob/master/azuresite/production.py
 ALLOWED_HOSTS = os.environ["WEBSITE_HOSTNAME"]
 
-# DATABASES
-# ------------------------------------------------------------------------------
-# The below settings are copied from https://github.com/Azure-Samples/djangoapp/blob/master/azuresite/production.py
-
 
 DATABASES["default"]["CONN_MAX_AGE"] = 60  # noqa F405
 
