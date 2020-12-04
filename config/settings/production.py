@@ -1,3 +1,4 @@
+import os
 from .base import *  # noqa
 from .base import env
 
@@ -6,13 +7,34 @@ from .base import env
 # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
 SECRET_KEY = env("DJANGO_SECRET_KEY")
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["example.com"])
+
+# ND 4.12.2020 https://github.com/Azure-Samples/djangoapp/blob/master/azuresite/production.py
+ALLOWED_HOSTS = os.environ["WEBSITE_HOSTNAME"]
 
 # DATABASES
 # ------------------------------------------------------------------------------
-DATABASES["default"] = env.db("DATABASE_URL")  # noqa F405
+# DATABASES["default"] = env.db("DATABASE_URL")  # noqa F405
 DATABASES["default"]["ATOMIC_REQUESTS"] = True  # noqa F405
 DATABASES["default"]["CONN_MAX_AGE"] = env.int("CONN_MAX_AGE", default=60)  # noqa F405
+
+
+### The below settings are copied from https://github.com/Azure-Samples/djangoapp/blob/master/azuresite/production.py
+
+# DBHOST is only the server name, not the full URL
+hostname = os.environ["DBHOST"]
+
+# Configure Postgres database; the full username is username@servername,
+# which we construct using the DBHOST value.
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.environ["DBNAME"],
+        "HOST": hostname + ".postgres.database.azure.com",
+        "USER": os.environ["DBUSER"] + "@" + hostname,
+        "PASSWORD": os.environ["DBPASS"],
+    }
+}
+
 
 # CACHES
 # ------------------------------------------------------------------------------
@@ -53,6 +75,7 @@ SECURE_HSTS_PRELOAD = env.bool("DJANGO_SECURE_HSTS_PRELOAD", default=True)
 SECURE_CONTENT_TYPE_NOSNIFF = env.bool(
     "DJANGO_SECURE_CONTENT_TYPE_NOSNIFF", default=True
 )
+SECURE_REFERRER_POLICY = "same-origin"
 
 # STATIC
 # ------------------------
