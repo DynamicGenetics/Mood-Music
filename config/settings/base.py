@@ -3,19 +3,19 @@ Base settings to build other settings files upon.
 """
 
 import os
-import environ
+# import environ
 
 from pathlib import Path
 
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 # moodmusic/
 APPS_DIR = ROOT_DIR / "moodmusic"
-env = environ.Env()
+# env = environ.Env()
 
-READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=False)
-if READ_DOT_ENV_FILE:
-    # OS environment variables take precedence over variables from .env
-    env.read_env(str(ROOT_DIR / ".env"))
+# READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=False)
+# if READ_DOT_ENV_FILE:
+#     # OS environment variables take precedence over variables from .env
+#     env.read_env(str(ROOT_DIR / ".env"))
 
 # GENERAL
 # ------------------------------------------------------------------------------
@@ -228,9 +228,6 @@ X_FRAME_OPTIONS = "DENY"
 # EMAIL
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
-EMAIL_BACKEND = env(
-    "DJANGO_EMAIL_BACKEND", default="django.core.mail.backends.console.EmailBackend"
-)
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-timeout
 EMAIL_TIMEOUT = 5
 
