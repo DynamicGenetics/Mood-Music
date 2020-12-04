@@ -7,11 +7,12 @@ from .base import *  # noqa
 SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
 
+DEBUG = False
+
 # ND 4.12.2020 https://github.com/Azure-Samples/djangoapp/blob/master/azuresite/production.py
-ALLOWED_HOSTS = os.environ["WEBSITE_HOSTNAME"]
-
-
-DATABASES["default"]["CONN_MAX_AGE"] = 60  # noqa F405
+ALLOWED_HOSTS = [
+    "moodmusicwebapp.azurewebsites.net",
+]
 
 # SECURITY
 # ------------------------------------------------------------------------------

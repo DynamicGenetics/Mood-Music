@@ -16,7 +16,6 @@ APPS_DIR = ROOT_DIR / "moodmusic"
 # GENERAL
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#debug
-DEBUG = os.environ["DJANGO_DEBUG"]
 
 # Local time zone. Choices are
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -36,24 +35,29 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#locale-paths
 LOCALE_PATHS = [str(ROOT_DIR / "locale")]
 
-# DATABASES
-# ------------------------------------------------------------------------------
-# https://docs.djangoproject.com/en/dev/ref/settings/#databases
-if DEBUG:
-    DATABASES = {
-        "default": {"ENGINE": "django.db.backends.postgresql", "NAME": "moodmusic"}
-    }
-else:
-    DATABASES = {"default": os.environ["DATABASE_URL"]}
-
-DATABASES["default"]["ATOMIC_REQUESTS"] = True
-
 # URLS
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#root-urlconf
 ROOT_URLCONF = "config.urls"
 # https://docs.djangoproject.com/en/dev/ref/settings/#wsgi-application
 WSGI_APPLICATION = "config.wsgi.application"
+
+# DATABASES
+# ------------------------------------------------------------------------------
+# https://docs.djangoproject.com/en/dev/ref/settings/#databases
+
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.environ.get("DB_NAME", "moodmusic"),
+        "USER": os.environ.get("DB_USER", "postgres"),
+        "PASSWORD": os.environ.get("DB_PASSWD", "postgres"),
+        "HOST": os.environ.get("DB_HOST", "127.0.0.1"),
+        "PORT": os.environ.get("DB_PORT", 5432),
+        "CONN_MAX_AGE": 60,
+        "ATOMIC_REQUESTS": True,
+    }
+}
 
 # APPS
 # ------------------------------------------------------------------------------
