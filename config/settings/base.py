@@ -267,7 +267,7 @@ LOGGING = {
 
 # django-allauth
 # ------------------------------------------------------------------------------
-ACCOUNT_ALLOW_REGISTRATION = os.environ["DJANGO_ACCOUNT_ALLOW_REGISTRATION"]
+ACCOUNT_ALLOW_REGISTRATION = True
 
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 ACCOUNT_EMAIL_REQUIRED = True
