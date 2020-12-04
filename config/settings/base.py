@@ -75,7 +75,6 @@ THIRD_PARTY_APPS = [
     "allauth.socialaccount",
     "bootstrapform",
     "social_django",
-    "django_extensions",
     "phonenumber_field",
     "django_apscheduler",
 ]
