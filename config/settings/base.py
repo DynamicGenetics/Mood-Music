@@ -17,6 +17,7 @@ APPS_DIR = ROOT_DIR / "moodmusic"
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#debug
 DEBUG = os.environ["DJANGO_DEBUG"]
+
 # Local time zone. Choices are
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # though not all of them may be available with every OS.
