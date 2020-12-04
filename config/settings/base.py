@@ -38,9 +38,14 @@ LOCALE_PATHS = [str(ROOT_DIR / "locale")]
 # DATABASES
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
+if DEBUG:
+    DATABASES = {
+        "default": {"ENGINE": "django.db.backends.postgresql", "NAME": "moodmusic"}
+    }
+else:
+    DATABASES = {"default": os.environ["DATABASE_URL"]}
 
-DATABASES = {"default": os.environ("DATABASE_URL", default="postgres:///moodmusic")}
-DATABASES["default"]["ATOMIC_REQUESTS"] = True
+ATOMIC_REQUESTS = True
 
 # URLS
 # ------------------------------------------------------------------------------
@@ -262,7 +267,7 @@ LOGGING = {
 
 # django-allauth
 # ------------------------------------------------------------------------------
-ACCOUNT_ALLOW_REGISTRATION = env.bool("DJANGO_ACCOUNT_ALLOW_REGISTRATION", True)
+ACCOUNT_ALLOW_REGISTRATION = os.environ["DJANGO_ACCOUNT_ALLOW_REGISTRATION"]
 
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 ACCOUNT_EMAIL_REQUIRED = True
