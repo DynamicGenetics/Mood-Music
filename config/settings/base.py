@@ -45,7 +45,7 @@ if DEBUG:
 else:
     DATABASES = {"default": os.environ["DATABASE_URL"]}
 
-ATOMIC_REQUESTS = True
+DATABASES["default"]["ATOMIC_REQUESTS"] = True
 
 # URLS
 # ------------------------------------------------------------------------------
