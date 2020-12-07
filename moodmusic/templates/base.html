@@ -48,19 +48,19 @@
           <ul class="navbar-nav mr-auto">
             {% if request.user.is_authenticated %}
               <li class="nav-item">
-                <a id="dashboard-link" class="nav-link" href="{% url 'dashboard:index' %}">{% trans "My Dashboard" %}</a>
+                <a id="dashboard-link" class="nav-link text-nowrap" href="{% url 'dashboard:index' %}">{% trans "My Dashboard" %}</a>
               </li>
               <li class="nav-item">
                 {# URL provided by django-allauth/account/urls.py #}
-                <a class="nav-link" href="{% url 'account_logout' %}">{% trans "Sign Out" %}</a>
+                <a class="nav-link text-nowrap" href="{% url 'account_logout' %}">{% trans "Sign Out" %}</a>
               </li>
             {% else %}
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'about' %}">Study Information</a>
+                <a class="nav-link text-nowrap" href="{% url 'about' %}">Study Information</a>
               </li>
               <li class="nav-item">
                 {# URL provided by django-allauth/account/urls.py #}
-                <a id="log-in-link" class="nav-link" href="{% url 'account_login' %}">{% trans "Log In" %}</a>
+                <a id="log-in-link text-nowrap" class="nav-link" href="{% url 'account_login' %}">{% trans "Log In" %}</a>
               </li>
             {% endif %}
           </ul>
