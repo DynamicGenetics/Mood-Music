@@ -20,6 +20,10 @@ h1 {
   padding-bottom: 20px;
 }
 
+h4 {
+  padding-top: 5%;
+}
+
 p {
   padding-top: 10px ;
   padding-bottom: 5px;
@@ -27,6 +31,12 @@ p {
 
 .btn {
   margin: 15px 15px 15px 0px;
+}
+
+th { font-weight: normal; }
+
+tr {
+  bottom: 5px;
 }
 
 /* Nav Bar CSS */
@@ -38,8 +48,8 @@ p {
 /* Home Page CSS */
 body.home {
   background: url("../images/homepage.png") no-repeat center center fixed;
-  background-size: 50%;
-  background-position: 15% 80% ;
+  background-size: 60%;
+  background-position: 5% 90% ;
 }
 
 .homepage-title {
@@ -52,12 +62,13 @@ body.home {
 }
 
 .home-text {
-  padding-top: 120px;
+  text-align: center;
+  padding-top: 100px;
   padding-left: 10%;
 }
 
 .home-info {
-  padding-top: 150px;
+  padding-top: 100px;
   background-color: white;
 }
 
@@ -69,3 +80,5 @@ body.home {
   position: relative;
   float: right;
 }
+
+/* About Page CSS */
