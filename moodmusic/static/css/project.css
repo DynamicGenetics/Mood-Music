@@ -12,17 +12,7 @@
   border-color: #eed3d7;
 }
 
-/* Home Page CSS */
-
-body.home {
-  background: url("../images/homepage.png") no-repeat center center fixed;
-  background-size: 90%;
-  background-position-y: 80%; 
-}
-
-.home-text {
-  padding-top: 170px;
-}
+/* General formatting */
 
 h1 {
   font-family: 'Permanent Marker', cursive;
@@ -37,4 +27,45 @@ p {
 
 .btn {
   margin: 15px 15px 15px 0px;
+}
+
+/* Nav Bar CSS */
+.navbar-text {
+  padding-top: 2px;
+  padding-bottom: 2px
+}
+
+/* Home Page CSS */
+body.home {
+  background: url("../images/homepage.png") no-repeat center center fixed;
+  background-size: 50%;
+  background-position: 15% 80% ;
+}
+
+.homepage-title {
+  font-size: 480%;
+  font-family: 'Permanent Marker', cursive;
+}
+
+#home-row {
+  width: 100%
+}
+
+.home-text {
+  padding-top: 120px;
+  padding-left: 10%;
+}
+
+.home-info {
+  padding-top: 150px;
+  background-color: white;
+}
+
+.home-box {
+  padding-top: 15px;
+}
+
+.home-buttons {
+  position: relative;
+  float: right;
 }
