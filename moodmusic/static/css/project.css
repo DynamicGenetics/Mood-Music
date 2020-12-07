@@ -48,32 +48,32 @@ tr {
 /* Home Page CSS */
 body.home {
   background: url("../images/homepage.png") no-repeat center center fixed;
-  background-size: 60%;
+  background-size: 58%;
   background-position: 5% 90% ;
-}
-
-.homepage-title {
-  font-size: 480%;
-  font-family: 'Permanent Marker', cursive;
 }
 
 #home-row {
   width: 100%
 }
 
+.homepage-title {
+  font-size: 450%;
+  font-family: 'Permanent Marker', cursive;
+}
+
 .home-text {
   text-align: center;
-  padding-top: 100px;
+  padding-top: 5%;
   padding-left: 10%;
 }
 
+
 .home-info {
-  padding-top: 100px;
-  background-color: white;
+  padding-top: 5%;
 }
 
 .home-box {
-  padding-top: 15px;
+  padding-top: 10%;
 }
 
 .home-buttons {
