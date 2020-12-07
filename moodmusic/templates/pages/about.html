@@ -1,20 +1,269 @@
 {% extends "base.html" %}
+{% load static%}
 
 {% block content %}
 
-    <div class="container">
-            <div class="page-header">
-                <h1>Study Information</h1>
+<div class="container">
+    <div class="page-header">
+        <h1>Study Information</h1>
+    </div>
+        <p>We are currently looking for University of Bristol student participants! </br>
+            If you are interested, then please make sure you have read the information on this page. You can click on the button at the bottom if
+            you still want to be involved.
+            If you have any questions you can email <a href="mailto:nina.dicara@bristol.ac.uk">Nina</a>.
+        </p>
+        
+
+        <div id="accordion" class="myaccordion">
+            <div class="card">
+              <div class="card-header" id="headingOne">
+                <h5 class="mb-0">
+                  <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    What is the research about?
+                  </button>
+                </h5>
+              </div>
+          
+              <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                <div class="card-body">
+                    We are doing a study to find out about how the music we listen to is related to our mood. 
+                    To do this we are looking for people to fill out five surveys for us, every day for two weeks,
+                    and share their Spotify data with us, so we can use statistical methods to see if there is a 
+                    relationship between the two.  
+                </div>
+              </div>
             </div>
-            <p>We are doing a study to find out about how the music we listen to is related to our mood.
-                To do this we are looking for people to fill out five surveys for us, every day for two weeks,
-                and share their Spotify data with us, so we can use statistical methods to see if there is a
-                relationship between the two.
-                We are currently looking for University of Bristol student participants!
-                <br><br>
-                If you are interested, then read this page. You can click ‘Take Part’ at the bottom if you still want to be involved.
-                If you have any questions you can ask <a href="mailto:nina.dicara@bristol.ac.uk">Nina</a>.
-            </p>
+
+            <div class="card">
+              <div class="card-header" id="headingTwo">
+                <h5 class="mb-0">
+                  <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    Who is responsible for this research?
+                  </button>
+                </h5>
+              </div>
+              <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                <div class="card-body">
+                    <p>The people responsible for this study are: </br>
+                    Nina Di Cara </br>
+                    Dr Oliver Davis	</br>
+                    Prof Claire Haworth </br>
+                    We are a team at the 
+                    <a href=http://www.bristol.ac.uk/integrative-epidemiology/ target="_blank">MRC Integrative Epidemiology Unit</a>
+                    at the University of Bristol.  </p>
+                    
+                    <p>Funding for the study is from the Jean Golding Institute, and the Elizabeth Blackwell Institute.</p>
+                    
+                    <p>The study has been reviewed and approved by the Faculty of Health Sciences Research Ethics Committee (ID:101846).
+                    If you have any concerns about it you can contact <a href="mailto:research-governance@bristol.ac.uk">research-governance@bristol.ac.uk</a>.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header" id="headingThree">
+                <h5 class="mb-0">
+                  <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                    Who can take part?
+                  </button>
+                </h5>
+              </div>
+
+              <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+                <div class="card-body">
+                    You can take part if you are:
+                    <ul>
+                        <li>Over 18 years old</li>	
+                        <li>University of Bristol student</li> 
+                        <li>A Spotify Premium user who usually uses Spotify daily</li>
+                    </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" id="headingFour">
+                  <h5 class="mb-0">
+                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                        What will happen to me if I take part and what will I have to do?
+                    </button>
+                  </h5>
+                </div>
+  
+                <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
+                  <div class="card-body">
+                    There are a few things you will need to do, after you have consented to take part. All of them will be done online,
+                        or through your phone.
+                        <ol>
+                            <li>Fill in some surveys about your wellbeing, mental health, personality traits, and tell us your age and gender.
+                                This won’t take longer than 20 minutes.</li>
+                            <li>Authorise the study to access your Spotify listening history though our website.
+                                This will prompt you to log into Spotify and approve access. We will use the authorisation code this generates 
+                                to collect your listening data during the two-weeks you fill in daily surveys. </li>
+                            <li>Answer five questions about how you feel, five times a day for two weeks by text message.</li>
+                            <li>Lastly, we’ll ask you to download your listening data from Spotify (which covers the past year), and upload it 
+                                to our website. We do this as well as Step 2 because your download contains songs you have skipped, as well as the 
+                                songs you have listened to and also means we can see whether people’s listening habits change when they are taking
+                                part in a study.</li>
+                        </ol>                  
+                        <div class="about-img-div"><img src="{% static 'images/about/screenshot.png' %}"
+                            alt="screenshot with an example of a text from the study." class="about-img" style="height:500px;">
+                        </div>
+                    </div>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-header" id="headingFive">
+                  <h5 class="mb-0">
+                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                        Will I get any expenses or payment?
+                    </button>
+                  </h5>
+                </div>
+  
+                <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#accordion">
+                  <div class="card-body">
+                    Anyone who completes all four stages will get a £30 shopping voucher. </br>
+                    If you are a Psychology student, you will be able to claim 3 hours towards the Experimental Hours scheme.
+                    As a ‘THANK YOU!’ for taking part, you will also get a visualisation of you Spotify data.                
+                    </div>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-header" id="headingSeven">
+                  <h5 class="mb-0">
+                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+                        What are the possible disadvantages/risks and benefits of taking part?
+                    </button>
+                  </h5>
+                </div>
+  
+                <div id="collapseSeven" class="collapse" aria-labelledby="headingSeven" data-parent="#accordion">
+                  <div class="card-body">
+                    <b>Benefits</b>
+                    You will be contributing to a brand-new study and helping us to understand the ways in which our wellbeing affects
+                    our behaviour. </br>
+                    This research is working towards helping us understand mental health, wellbeing and behaviour better. </br>
+
+                    <b>Disadvantages/Risks</b>
+                    The study will ask you questions about how you feel regularly throughout the day, for 2 weeks. You should think about
+                        whether you will be comfortable to reflect on how you are feeling this often.
+                        At the beginning there is also a questionnaire which asks questions about your wellbeing.
+                </div>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-header" id="headingEight">
+                  <h5 class="mb-0">
+                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseEight" aria-expanded="false" aria-controls="collapseEight">
+                        How will you safeguard my data, and my confidentiality?
+                    </button>
+                  </h5>
+                </div>
+  
+                <div id="collapseEight" class="collapse" aria-labelledby="headingEight" data-parent="#accordion">
+                  <div class="card-body">
+                    <p>We will be taking several steps to keep your data safe, and make sure your confidentiality is maintained. All data
+                        will be stored and managed in line with GDPR requirements.</p>
+
+                        <ul>
+                    
+                            <li>All data we collect will be stored securely, in a location approved for research data storage.</li>
+                                
+                            <li>Data that might reveal who you are, such as your email address, will be kept securely and separately to all the
+                                other data about you, and will only be accessible by the study team.</li>
+                                
+                            <li>For all the other data we collect, we will store it against a participant number, instead of your name, to maintain
+                                your confidentiality. </li>
+                                
+                            <li>At the end of the study we will make your listening history (the list of songs you have listened to, and the date/time
+                                your listened to them), and your survey data (your age, gender, initial surveys and daily wellbeing surveys) available
+                                as an anonymous dataset, so you will not be identifiable. Anyone who wants to use the dataset will have to ask to get
+                                access to it. This data will be stored by the University’s Research Data Storage Facility. </li>
+                                
+                            <li>Within 60 days of the data collection finishing, we will securely destroy your identifiable information, such as your
+                                email address. At this point we will no longer know whose data is whose. </li>
+                                
+                            <li>The only reason that we would break our promise of confidentiality during the study is if we were so concerned about
+                                your mental health that we thought you might be a risk to yourself, or to somebody else. In this situation we would
+                                call the emergency services.</li>
+
+                        </ul>
+
+                        <div class="col-12 col-lg-5">
+                            <div class="about-img-div"><img src="{% static 'images/about/data.png' %}"
+                                alt="diagram explaining what will happen to participant data." class="about-img" style="height:500px;"></div>
+                        </div>
+                </div>
+                </div>
+              </div>
+
+
+              <div class="card">
+                <div class="card-header" id="headingNine">
+                  <h5 class="mb-0">
+                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseNine" aria-expanded="false" aria-controls="collapseNine">
+                        What will happen if I don’t want to carry on with the study?
+                    </button>
+                  </h5>
+                </div>
+  
+                <div id="collapseNine" class="collapse" aria-labelledby="headingNine" data-parent="#accordion">
+                  <div class="card-body">
+                    You can withdraw from the study at any time by emailing Nina (nina.dicara@bristol.ac.uk).
+                    You do not need to have a reason, just let us know. </br>
+                    If it is before everyone’s identifiable data has been deleted, we can delete all your data from the study. If it is
+                    afterwards then we can’t delete your data, because we will not know which it is.
+                </div>
+                </div>
+              </div>
+
+
+              <div class="card">
+                <div class="card-header" id="headingTen">
+                  <h5 class="mb-0">
+                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTen" aria-expanded="false" aria-controls="collapseTen">
+                        What will happen to the results of the research?
+                    </button>
+                  </h5>
+                </div>
+  
+                <div id="collapseTen" class="collapse" aria-labelledby="headingTen" data-parent="#accordion">
+                  <div class="card-body">
+                    <p>When we have done all of our analysis, we will write a blog on the Jean Golding Institute’s website. After that, we will
+                        write an academic research article about the results, so that other people can find out about what we have done. 
+                        The data we share in these articles will never contain identifying information.</p>
+        
+                    <p>So that you can stay informed, we will post links to these articles on the study website. That way, you can check back
+                        and read about the results.</p>
+                </div>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-header" id="headingEleven">
+                  <h5 class="mb-0">
+                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseEleven" aria-expanded="false" aria-controls="collapseEleven">
+                        I'd like to ask some questions
+                    </button>
+                  </h5>
+                </div>
+  
+                <div id="collapseEleven" class="collapse" aria-labelledby="headingEleven" data-parent="#accordion">
+                  <div class="card-body">
+                    We'd be happy to answer any questions you have! Email Nina at nina.dicara@bristol.ac.uk. 
+                </div>
+                </div>
+              </div>
+
+          </div>
+
     </div>    
-    <a href="{% url 'account_signup' %}" class="btn btn-success float-md-right">Yes, I'd like to take part</a>
+
+    <a href="{% url 'account_signup' %}" class="btn btn-primary btn-lg btn-block about-button">I've Read The Information - Sign Me Up To Take Part In The Study</a>
+
+    
 {% endblock content %}
