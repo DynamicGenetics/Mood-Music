@@ -20,7 +20,7 @@ Our pilot study has launched! We'll be recruiting University of Bristol students
 **Dec 2020**  
 We've completed our series of participant advisory groups and are ready to get started with a pilot study.
 
-**Aug 2021**  
+**Aug 2020**  
 [Read about the Mood Music Study on the Jean Golding Insitute Blog](https://jeangoldinginstitute.blogs.bristol.ac.uk/2020/08/05/mood-music-inferring-wellbeing-from-spotify/)
 
 
