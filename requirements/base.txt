@@ -1,28 +1,28 @@
-pytz==2020.1  # https://github.com/stub42/pytz
-python-slugify==4.0.0  # https://github.com/un33k/python-slugify
-Pillow==7.1.2  # https://github.com/python-pillow/Pillow
-psycopg2-binary==2.8.5  # https://github.com/psycopg/psycopg2
-argon2-cffi==19.2.0  # https://github.com/hynek/argon2_cffi
-whitenoise==5.0.1  # https://github.com/evansd/whitenoise
+pytz>=2020.1  # https://github.com/stub42/pytz
+python-slugify>=4.0.0  # https://github.com/un33k/python-slugify
+Pillow>=7.1.2  # https://github.com/python-pillow/Pillow
+psycopg2-binary>=2.8.5  # https://github.com/psycopg/psycopg2 
+argon2-cffi>=19.2.0  # https://github.com/hynek/argon2_cffi
+whitenoise>=5.0.1  # https://github.com/evansd/whitenoise
 
 # Django
 # ------------------------------------------------------------------------------
-django==3.1  # pyup: < 3.1  # https://www.djangoproject.com/
-django-model-utils==4.0.0  # https://github.com/jazzband/django-model-utils
-django-allauth==0.41.0  # https://github.com/pennersr/django-allauth
-django-crispy-forms==1.9.0  # https://github.com/django-crispy-forms/django-crispy-forms
-django-bootstrap-form==3.4 # https://github.com/tzangms/django-bootstrap-form
+django>=3.2  # https://www.djangoproject.com/
+django-model-utils>=4.0.0  # https://github.com/jazzband/django-model-utils
+django-allauth>=0.41.0  # https://github.com/pennersr/django-allauth
+django-crispy-forms>=1.9.0  # https://github.com/django-crispy-forms/django-crispy-forms
+django-bootstrap-form>=3.4 # https://github.com/tzangms/django-bootstrap-form
 
 # Third Party Apps for EMA and Music modules
 # ------------------------------------------------------------------------------
-social-auth-app-django==3.1.0 # https://github.com/python-social-auth/social-app-django
-social-auth-core[openidconnect]==2.0.0
-spotipy==2.13.0
-django-phonenumber-field==5.0.0
-phonenumbers==8.12.8
-django-apscheduler==0.5.1 # https://github.com/jarekwg/django-apscheduler
+social-auth-app-django>=3.1.0 # https://github.com/python-social-auth/social-app-django
+social-auth-core[openidconnect]>=2.0.0
+spotipy>=2.13.0
+django-phonenumber-field>=5.0.0
+phonenumbers>=8.12.8
+django-apscheduler>=0.5.1 # https://github.com/jarekwg/django-apscheduler
 
 # Other/Utilities
 # ------------------------------------------------------------------------------
-numpy==1.18.4
-twilio==6.45.0
+numpy>=1.18.4
+twilio>=6.45.0
