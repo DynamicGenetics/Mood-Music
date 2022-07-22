@@ -28,6 +28,8 @@ CACHES = {
 EMAIL_HOST = "localhost"
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-port
 EMAIL_PORT = 1025
+# Added 22.07.2022 due to Connection Error raised in local dev environment
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 # WhiteNoise
 # ------------------------------------------------------------------------------
