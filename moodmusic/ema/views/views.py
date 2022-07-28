@@ -55,9 +55,3 @@ def respond_to_incoming_message(request):
                 number, text, receieved
             )
         )
-        reply = "Sorry, we don't know this number. Get in touch if you think that we should."
-
-        # Add the appropriate reply to the message
-        resp.message(reply)
-        # Send the reply via Twilio endpoint
-        return HttpResponse(str(resp))
