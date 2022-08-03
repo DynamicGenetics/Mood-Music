@@ -8,27 +8,26 @@ Sphinx>=3.0.3  # https://github.com/sphinx-doc/sphinx
 # ------------------------------------------------------------------------------
 mypy>=0.770  # https://github.com/python/mypy
 django-stubs>=1.5.0  # https://github.com/typeddjango/django-stubs
-pytest>=5.4.2  # https://github.com/pytest-dev/pytest
-pytest-sugar>=0.9.3  # https://github.com/Frozenball/pytest-sugar
-freezegun>=0.3.15 # https://github.com/spulec/freezegun
-hypothesis>=5.29.0 # https://hypothesis.readthedocs.io/en/latest/#
-faker>=4.1.0 # https://github.com/joke2k/faker
-pytest-mock >= 3.2.0 # https://github.com/pytest-dev/pytest-mock/
+pytest>=7.1.2  # https://github.com/pytest-dev/pytest
+pytest-sugar>=0.9.4  # https://github.com/Frozenball/pytest-sugar
+freezegun>=1.2.1 # https://github.com/spulec/freezegun
+hypothesis>=6.47.2 # https://hypothesis.readthedocs.io/en/latest/#
+faker>=13.13.0 # https://github.com/joke2k/faker
+pytest-mock >=3.7.0 # https://github.com/pytest-dev/pytest-mock/
 
 # Code quality
 # ------------------------------------------------------------------------------
-flake8>=3.8.1  # https://github.com/PyCQA/flake8
-coverage>=5.1  # https://github.com/nedbat/coveragepy
-black>=19.10b0  # https://github.com/ambv/black
-pylint-django>=2.0.15  # https://github.com/PyCQA/pylint-django
-pre-commit>=2.6.0  # https://github.com/pre-commit/pre-commit
+flake8>=4.0.1  # https://github.com/PyCQA/flake8
+coverage>=6.4.1  # https://github.com/nedbat/coveragepy
+black>=22.3.0  # https://github.com/ambv/black
+pylint-django>=2.5.3  # https://github.com/PyCQA/pylint-django
+pre-commit>=2.19.0  # https://github.com/pre-commit/pre-commit
 pylint-celery>=0.3  # https://github.com/PyCQA/pylint-celery
 
 # Django
 # ------------------------------------------------------------------------------
-factory-boy>=2.12.0  # https://github.com/FactoryBoy/factory_boy
-
-django-debug-toolbar>=2.2  # https://github.com/jazzband/django-debug-toolbar
-django-extensions>=2.2.9  # https://github.com/django-extensions/django-extensions
-django-coverage-plugin>=1.8.0  # https://github.com/nedbat/django_coverage_plugin
-pytest-django>=3.9.0  # https://github.com/pytest-dev/pytest-django
+factory-boy>=3.2.1  # https://github.com/FactoryBoy/factory_boy
+django-debug-toolbar>=3.4.0  # https://github.com/jazzband/django-debug-toolbar
+django-extensions>=3.1.5  # https://github.com/django-extensions/django-extensions
+django-coverage-plugin>=2.0.3  # https://github.com/nedbat/django_coverage_plugin
+pytest-django>=4.5.2  # https://github.com/pytest-dev/pytest-django
