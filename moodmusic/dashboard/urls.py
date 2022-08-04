@@ -10,4 +10,5 @@ urlpatterns = [
     path("verification/", views.phone_verification, name="phone_verification"),
     path("verification/token/", views.token_validation, name="token_validation"),
     path("verified/", views.verified, name="verified"),
+    path("check-email/", views.static.check_email, name="check_email"),
 ]

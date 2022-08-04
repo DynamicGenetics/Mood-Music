@@ -1,8 +1,9 @@
 from django import forms
 from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth import get_user_model
+from django.urls import reverse
 from allauth.account.forms import SignupForm
-
+from sesame.utils import get_query_string
 
 User = get_user_model()
 
@@ -88,6 +89,34 @@ class CustomSignupForm(SignupForm):
     # and then any unspecified fields are below.
     field_order = ["email"]
 
+    @staticmethod
+    def send_welcome_email(user, request):
+        # As part of save, generate and send magic link to complete process.
+        link = reverse("sesame-login")
+        link = request.build_absolute_uri(link) 
+        link += get_query_string(user)
+
+        # Email the link to the user
+        user.email_user(
+                    subject="Mood Music: Complete signup",
+                    message=f"""\
+        Hi,
+
+        Thank you for signing up to take part in the study!
+        Below is a one-time link to register your phone number and Spotify account, which is Stage 1 of the study.
+        You'll also be asked to complete some surveys about yourself. 
+
+        {link}
+
+        When the study starts you will then recieve text messages each day asking about your mood. 
+
+        Thanks again for taking part, and if you have any questions or no longer want to do the study then just
+        get in contact at nina.dicara@bristol.ac.uk
+
+        Best wishes from the Mood Music team
+        """)
+
+
     def save(self, request):
         # Instructions https://django-allauth.readthedocs.io/en/latest/forms.html
         user = super(CustomSignupForm, self).save(request)
@@ -96,4 +125,8 @@ class CustomSignupForm(SignupForm):
         user.email = self.cleaned_data["email"]
         user.consent_granted = self.cleaned_data["consent_granted"]
         user.save()
+
+        # Send a welcome email with a magic link
+        self.send_welcome_email(user, request)
+
         return user

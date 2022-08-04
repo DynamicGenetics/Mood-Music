@@ -4,12 +4,10 @@ from django.contrib import admin
 from django.urls import include, path
 from django.views import defaults as default_views
 from django.views.generic import TemplateView
+from sesame.views import LoginView
 
 urlpatterns = [
     path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
-    path(
-        "about/", TemplateView.as_view(template_name="pages/about.html"), name="about"
-    ),
     # Django Admin, use {% url 'admin:index' %}
     path(settings.ADMIN_URL, admin.site.urls),
     # User management
@@ -17,7 +15,9 @@ urlpatterns = [
     # Your stuff: custom urls includes go here
     path("dashboard/", include("moodmusic.dashboard.urls", namespace="dashboard")),
     path("ema/", include("moodmusic.ema.urls")),
-    path("", include("social_django.urls", namespace="social")),
+    path("", include("social_django.urls", namespace="social"),
+    path("login/auth/", LoginView.as_view(), name="login"),),
+    path("sesame/login/", LoginView.as_view(), name="sesame-login"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 

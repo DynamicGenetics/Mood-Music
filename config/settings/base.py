@@ -278,8 +278,10 @@ ACCOUNT_ALLOW_REGISTRATION = True
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+ACCOUNT_EMAIL_VERIFICATION = "none"
 ACCOUNT_AUTHENTICATION_METHOD = "email"
+# Where to go directly after sign up
+ACCOUNT_SIGNUP_REDIRECT_URL = "/dashboard/check-email"
 
 # Redirects
 ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = "/dashboard/"
@@ -294,8 +296,6 @@ ACCOUNT_FORMS = {"signup": "users.forms.CustomSignupForm"}
 # ------------------------------------------------------------------------------
 SOCIAL_AUTH_URL_NAMESPACE = "social"
 SOCIAL_AUTH_JSONFIELD_ENABLED = True
-
-# This is going to be a problem...? We have two LOGIN_REDIRECT_URLs
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = "/dashboard/thanks/"
 SOCIAL_AUTH_STRATEGY = "social_django.strategy.DjangoStrategy"
 SOCIAL_AUTH_STORAGE = "social_django.models.DjangoStorage"

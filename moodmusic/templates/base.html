@@ -54,10 +54,6 @@
                 {# URL provided by django-allauth/account/urls.py #}
                 <a class="nav-link text-nowrap" href="{% url 'account_logout' %}">{% trans "Sign Out" %}</a>
               </li>
-            {% else %}
-              <li class="nav-item">
-                <a class="nav-link text-nowrap" href="{% url 'about' %}">Study Information</a>
-              </li>
             {% endif %}
           </ul>
         </div>
