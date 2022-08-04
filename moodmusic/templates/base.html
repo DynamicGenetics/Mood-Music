@@ -7,13 +7,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/favicons/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicons/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/favicons/favicon-16x16.png' %}">
+    <link rel="manifest" href="/site.webmanifest">
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
     <![endif]-->
-
-    <link rel="icon" href="{% static 'images/favicons/favicon.ico' %}">
 
     {% block css %}
     
@@ -46,19 +48,19 @@
           <ul class="navbar-nav mr-auto">
             {% if request.user.is_authenticated %}
               <li class="nav-item">
-                <a id="dashboard-link" class="nav-link" href="{% url 'dashboard:index' %}">{% trans "My Dashboard" %}</a>
+                <a id="dashboard-link" class="nav-link text-nowrap" href="{% url 'dashboard:index' %}">{% trans "My Dashboard" %}</a>
               </li>
               <li class="nav-item">
                 {# URL provided by django-allauth/account/urls.py #}
-                <a class="nav-link" href="{% url 'account_logout' %}">{% trans "Sign Out" %}</a>
+                <a class="nav-link text-nowrap" href="{% url 'account_logout' %}">{% trans "Sign Out" %}</a>
               </li>
             {% else %}
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'about' %}">Study Information</a>
+                <a class="nav-link text-nowrap" href="{% url 'about' %}">Study Information</a>
               </li>
               <li class="nav-item">
                 {# URL provided by django-allauth/account/urls.py #}
-                <a id="log-in-link" class="nav-link" href="{% url 'account_login' %}">{% trans "Log In" %}</a>
+                <a id="log-in-link text-nowrap" class="nav-link" href="{% url 'account_login' %}">{% trans "Log In" %}</a>
               </li>
             {% endif %}
           </ul>

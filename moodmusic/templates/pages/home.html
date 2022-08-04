@@ -7,13 +7,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/favicons/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicons/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/favicons/favicon-16x16.png' %}">
+    <link rel="manifest" href="/site.webmanifest">
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
     <![endif]-->
-
-    <link rel="icon" href="{% static 'images/favicons/favicon.ico' %}">
 
     {% block css %}
     
@@ -28,7 +30,7 @@
 
   <body class="home">
 
-    <div class="container">
+    <div class="container-fluid">
 
       {% if messages %}
           {% for message in messages %}
@@ -37,20 +39,55 @@
       {% endif %}
 
       {% block content %}
-        <div class="col-xs-12 col-md-6">
-          <div class="home-text">
-            <h1 class="display-4">Mood Music</h1>
-            <p class="lead">We are running a research study to explore the relationship between music and mood.</p>
-            <a class="btn btn-info btn-lg" href="{% url 'about' %}" role="button">Find Out More</a>
-            <a class="btn btn-light btn-lg" href="{% url 'account_login' %}" role="button">Log in</a>
+      <div class="container-fluid">
+        <div id="home-row" class="row">   <!--Makes sure the two columns display alongside each other-->
+          
+          <div class="col-xs-12 col-md-6 home-text">
+              <p class="homepage-title"">Mood Music Study</p>
+              <h5>We are a team at the University of Bristol running a research study to explore the relationship between music and mood.</h5>
           </div>
-        </div>
-        
-        <div class="home-image"></div>  
+          
+          <div class="col-xs-12 col-md-4 offset-md-1 home-info">
 
-      {% endblock content %}
+            <div class="home-box">
+              <h5>What is the research about?</h5>
+              <p>We would like to understand how the way we listen to music is related to our mood.
+                To do that, we need to measure mood and music listening over time. We're looking for
+                participants to help! 
+              </p>
+            </div>
 
-    </div> <!-- /container -->
+            <div class="home-box">
+              <h5>What will participants do?</h5>
+              <p>
+                People who sign up to the study will need to do some initial questionnaires and
+                agree for us to collect their Spotify listening data. Then they will need to answer five
+                questions about their mood 5 times a day for 2 weeks. At the end, we'll ask everyone to complete
+                some final questionnaires, and send their listening data to us.
+              </p>
+            </div>
+
+            <div class="home-box">
+              <h5>Who can take part?</h5>
+              <p>You can take part if... </br>
+              You are a University of Bristol student who is over 18</br>
+              You have a Spotify Premium account </br>
+              </p>
+            </div>
+
+            <div class="home-buttons">
+              <a class="btn btn-primary btn-lg" href="{% url 'about' %}" role="button">Find Out More</a>
+              <a class="btn btn-light btn-lg" href="{% url 'account_login' %}" role="button">Log In</a>
+            </div>
+            
+          </div> <!-- home-info-->
+
+        </div> <!-- row-->
+
+      </div>  <!-- inner container -->
+
+    </div> <!-- outer container -->
+    {% endblock content %}
 
     {% block modal %}{% endblock modal %}
 

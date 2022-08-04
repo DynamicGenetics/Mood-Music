@@ -1,15 +1,14 @@
+import os
+
 from .base import *  # noqa
-from .base import env
 
 # GENERAL
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#debug
 DEBUG = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
-SECRET_KEY = env(
-    "DJANGO_SECRET_KEY",
-    default="BIkzd017yFEQW1nhgn9NsQaABEKjoWFIZQ4kFcrRJB9MOcj4bx5uSFRFrGmL3JZy",
-)
+SECRET_KEY = "BIkzd017yFEQW1nhgn9NsQaABEKjoWFIZQ4kFcrRJB9MOcj4bx5uSFRFrGmL3JZy"
+
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1", ".ngrok.io"]
 
@@ -29,12 +28,15 @@ CACHES = {
 EMAIL_HOST = "localhost"
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-port
 EMAIL_PORT = 1025
+# Added 22.07.2022 due to Connection Error raised in local dev environment
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 # WhiteNoise
 # ------------------------------------------------------------------------------
 # http://whitenoise.evans.io/en/latest/django.html#using-whitenoise-in-development
 INSTALLED_APPS = ["whitenoise.runserver_nostatic"] + INSTALLED_APPS  # noqa F405
 
+THIRD_PARTY_APPS = THIRD_PARTY_APPS + ["django_extensions"]  # noqa F405
 
 # django-debug-toolbar
 # ------------------------------------------------------------------------------

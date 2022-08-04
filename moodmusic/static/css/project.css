@@ -12,22 +12,16 @@
   border-color: #eed3d7;
 }
 
-/* Home Page CSS */
-
-body.home {
-  background: url("../images/homepage.png") no-repeat center center fixed;
-  background-size: 90%;
-  background-position-y: 80%; 
-}
-
-.home-text {
-  padding-top: 170px;
-}
+/* General formatting */
 
 h1 {
   font-family: 'Permanent Marker', cursive;
   padding-top: 5%;
   padding-bottom: 20px;
+}
+
+h4 {
+  padding-top: 5%;
 }
 
 p {
@@ -37,4 +31,104 @@ p {
 
 .btn {
   margin: 15px 15px 15px 0px;
+}
+
+th { font-weight: normal; }
+
+tr {
+  bottom: 5px;
+}
+
+/* Nav Bar CSS */
+.navbar-text {
+  padding-top: 2px;
+  padding-bottom: 2px
+}
+
+/* Home Page CSS */
+body.home {
+  background: url("../images/homepage.png") no-repeat center center fixed;
+  background-size: 58%;
+  background-position: 5% 90% ;
+}
+
+#home-row {
+  width: 100%
+}
+
+.homepage-title {
+  font-size: 450%;
+  font-family: 'Permanent Marker', cursive;
+}
+
+.home-text {
+  text-align: center;
+  padding-top: 5%;
+  padding-left: 10%;
+}
+
+
+.home-info {
+  padding-top: 5%;
+}
+
+.home-box {
+  padding-top: 10%;
+}
+
+.home-buttons {
+  position: relative;
+  float: right;
+}
+
+/* About Page CSS */
+.about-button {
+  padding-top: 15pt;
+  padding-bottom: 15pt;
+  margin-top: 50pt;
+  margin-bottom: 100pt;
+}
+
+
+.btn-link {
+  padding-top: 3pt;
+  padding-bottom: 3pt;
+}
+
+
+.myaccordion {
+  max-width: 900px;
+  margin: 50px auto;
+  box-shadow: 0 0 1px rgba(0,0,0,0.1);
+}
+ 
+.myaccordion .card,
+.myaccordion .card:last-child .card-header {
+  border: none;
+}
+ 
+.myaccordion .card-header {
+  border-bottom-color: #EDEFF0;
+  background: transparent;
+}
+ 
+.myaccordion .fa-stack {
+  font-size: 18px;
+}
+ 
+.myaccordion .btn {
+  width: 100%;
+  font-weight: bold;
+  color: #0d4a9b;
+  padding: 0;
+  text-align: left;
+}
+ 
+.myaccordion .btn-link:hover,
+.myaccordion .btn-link:focus {
+  text-decoration: none;
+}
+ 
+.myaccordion li + li {
+  margin-top: 10px;
 }
