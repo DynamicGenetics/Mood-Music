@@ -292,7 +292,7 @@ ACCOUNT_FORMS = {"signup": "users.forms.CustomSignupForm"}
 # Social Django App Settings
 # ------------------------------------------------------------------------------
 SOCIAL_AUTH_URL_NAMESPACE = "social"
-SOCIAL_AUTH_POSTGRES_JSONFIELD = True
+SOCIAL_AUTH_JSONFIELD_ENABLED = True
 
 # This is going to be a problem...? We have two LOGIN_REDIRECT_URLs
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = "/dashboard/thanks/"
