@@ -4,98 +4,20 @@
 {% block content %}
 
   <div class="container-fluid">
-    <h1>Dashboard</h1>
-
-    <p>Welcome to your personal dashboard for the Mood Music study! There are three steps below that you need to complete to begin with.
+    <h1>Welcome to the Mood Music study!</h1>
   
-    <p>You can review the Participant Information Sheet at any time by <a href="{% url 'about' %}">clicking on this link.</a>
-       If you have any questions then you can contact <a href="mailto:nina.dicara@bristol.ac.uk">Nina Di Cara</a>.</p>
-      
-    <!--SIGNUP IS OPEN-->
-    <div class="row">
-    <div class="col-sm-6 col-md-4">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Complete Initial Surveys</h5>
-                <p class="card-text"><font-weight-lighter class="text-muted">
-                  Initial surveys about your mental health and personality. The link will take
-                  you to another website to do them.</font-weight-lighter>
-                </p>
-                  <a href="{% url 'dashboard:index' %}" class="btn btn-primary stretched-link">Do the surveys</a>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-6 col-md-4">
-          <div class="card">
-              <div class="card-body">
-                  <h5 class="card-title">Register Your Phone Number</h5>
-                  <p class="card-text"><font-weight-lighter class="text-muted">
-                    Add and verify your phone number so that you can recieve your text surveys. We will start sending them on DATE.  
-                  </font-weight-lighter></p>
-                  <a href="{% url 'dashboard:mobile_guide' %}" class="btn btn-primary stretched-link">Set up my phone number</a>
-              </div>
-          </div>
-    </div>
-    <div class="col-sm-6 col-md-4">
-          <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Link Your Spotify Account</h5>
-                    <p class="card-text"><font-weight-lighter class="text-muted">
-                      To understand how you listen to music we need access to your Spotify listening history.
-                    </font-weight-lighter></p>
-                    <a href="{% url 'dashboard:spotify' %}" class="btn btn-primary stretched-link">Connect my Spotify account</a>
-                </div>
-            </div>
-    </div>
+    <p>There are three steps for you to complete today:</p>
+    <li>Step 1: Add your phone number so that you can recieve your text surveys.</li>
+    <li>Step 2: Connect your Spotify account so that we can access your listened songs.</li>
+    <li>Step 3: Complete some information about yourself.</li>
+
+    <br>
+    <p>Please complete these steps in one go if possible. It should take up to 30 minutes. </p>
+    <p>Remember, if you have any questions then you can contact <a href="mailto:nina.dicara@bristol.ac.uk">Nina Di Cara</a> on nina.dicara@bristol.ac.uk</p>
+
+
+    <a href="{% url 'dashboard:phone_verification' %}" class="btn btn-primary" role="button">Step 1: Add my phone number</a>
+
   </div>
-
-  </br>
-    
-    <!--STUDY CURRENTLY RUNNING-->
-    <div class="col-sm-6 col-md-6 offset-md-3">
-      <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Nothing to do here!</h5>
-                <p class="card-text"><font-weight-lighter class="text-muted">
-                  The study is currently running so there are no tasks for you on the dashboard. 
-                  Keep answering the text surveys, and remember to come back here at the end!
-                </font-weight-lighter></p>
-            </div>
-      </div>
-    </div>
-  
-  
-  </br>
-
-
-    <!--STUDY IS FINISHED-->
-    <div class="row">
-      <div class="col-sm-6 col-md-6">
-          <div class="card">
-              <div class="card-body">
-                  <h5 class="card-title">Complete Final Surveys</h5>
-                  <p class="card-text"><font-weight-lighter class="text-muted">
-                    Two final surveys about your mental health and wellbeing. The link will take
-                    you to another website to do them.</font-weight-lighter>
-                  </p>
-                    <a href="{% url 'dashboard:index' %}" class="btn btn-primary stretched-link">Do the surveys</a>
-              </div>
-          </div>
-      </div>
-      <div class="col-sm-6 col-md-6">
-              <div class="card">
-                  <div class="card-body">
-                      <h5 class="card-title">Download Your Spotify User Data</h5>
-                      <p class="card-text"><font-weight-lighter class="text-muted">
-                        Here you will find instructions on how to download your data from Spotify and the upload box.
-                      </font-weight-lighter></p>
-                      <a href="{% url 'dashboard:datadrop' %}" class="btn btn-primary stretched-link">Upload my Spotify data</a>
-                  </div>
-            </div>
-      </div>
-    </div>
-
-  </div> <!--container-->
-
 
 {% endblock %}

@@ -5,13 +5,11 @@
 {% block content %}
     
 
-    <h3>Collecting Your Spotify Data</h3>
+    <h2>Step 2: Connect your Spotify account</h2>
 
-    <p>We will collect your listening history from Spotify for the two weeks that the survey is running. 
-       You need to agree to give us access to your listening data so that we can do that.
-        When you click below you will be taken to Spotify's website and will have to log in. The website will tell you what 
-        data you are consenting to share with us before you confirm it. 
-    </p>
+    <li>When you click below you will be taken to Spotify's website and will have to log in.</li>
+    <li>The website will tell you what data you are consenting to share with us before you confirm it. </li>
+        
 
     <a href="{% url 'social:begin' 'spotify' %}" class="btn btn-success" role="button">Authorise access to my Spotify listening data</a>
 

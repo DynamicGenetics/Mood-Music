@@ -1,14 +1,38 @@
-{% extends "base.html" %}
+{% extends "dashboard/base.html" %}
+{% block title %}{% block head_title %}Dashboard{% endblock head_title %}{% endblock title %}
 
 {% block content %}
 
-<p>Type you phone number below. If you have a UK number you can type it as you usually would, beginning with "07". 
-If you have an international phone number then include the country code after a "+" sign. </p>
+<h2>Step 1: Add your phone number</h2>
 
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <input type="submit" value="Verify this phone number" class="btn btn-success">
-</form>
+<div class="modal-body row">
+    <div class="col-md-6">
+        <p>Provide the phone number below that you would like to receive your daily surveys on.
+            The surveys will be sent over text message by our automated system.</p>            
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input type="submit" value="Verify my phone number" class="btn btn-success">
+            </form>
+        <p>If you have a non-UK phone number then include the country code after a "+" sign.</p>
+
+    </div>
+    <div class="col-md-6">
+        <h3>Phone safety tips</h3>
+        <p>We will be keeping the responses that you send us secure, but here are some tips to keep the message history on your phone secure too.
+            <ol>
+                <li>Make sure that your phone has a <b>passcode</b> so that other people cannot access your data.</li>
+                <li>If you wish you can <b>delete the messages</b> after you have sent your replies. This will not affect our copy of the 
+                    data and will only delete the history from your phone.</li>
+            </ol></p>
+    </div>
+  </div>
+  
+
+
+
+
+
+        
 
 {% endblock %}
