@@ -13,6 +13,14 @@ class UserChangeForm(UserChangeForm):
 
 
 class CustomSignupForm(SignupForm):
+
+    def __init__(self, *args, **kwargs):
+        "Do this to remove the password fields from the form"
+        # https://stackoverflow.com/questions/51728580/django-allauth-remove-the-password-field-in-signup-form
+        super(CustomSignupForm, self).__init__(*args, **kwargs)
+        self.fields.pop('password1')
+        self.fields.pop('password2')
+
     # These are form items that aren't saved to a model instance.
     # However, we need people to indicate that they have understood before continuing.
     seen_information = forms.BooleanField(
@@ -78,7 +86,7 @@ class CustomSignupForm(SignupForm):
 
     # Specify the first couple of fields in this order. This appear at the top,
     # and then any unspecified fields are below.
-    field_order = ["email", "password1", "password2"]
+    field_order = ["email"]
 
     def save(self, request):
         # Instructions https://django-allauth.readthedocs.io/en/latest/forms.html
