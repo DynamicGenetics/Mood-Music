@@ -46,12 +46,6 @@ tr {
 }
 
 /* Home Page CSS */
-body.home {
-  background: url("../images/homepage.png") no-repeat center center fixed;
-  background-size: 58%;
-  background-position: 5% 90% ;
-}
-
 #home-row {
   width: 100%
 }
