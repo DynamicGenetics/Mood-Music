@@ -10,11 +10,6 @@
 
 <h1>{% trans "Log In" %}</h1>
 
-<p>If you have not created an account yet, then please
-  <a href="{% url 'about' %}">read the participant information sheet</a> first
-  to sign up. 
-</p>
-
 <form class="login" method="POST" action="{% url 'account_login' %}">
   {% csrf_token %}
   {{ form|crispy }}
