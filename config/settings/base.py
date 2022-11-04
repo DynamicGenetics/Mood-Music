@@ -48,7 +48,7 @@ WSGI_APPLICATION = "config.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
+        "ENGINE": "django.db.backends.mysql",
         "NAME": os.environ.get("DB_NAME", "moodmusic"),
         "USER": os.environ.get("DB_USER", ""),
         "PASSWORD": os.environ.get("DB_PASSWD", ""),
@@ -320,3 +320,6 @@ PHONENUMBER_DEFAULT_REGION = "GB"
 
 # For pre-save user signal
 MAX_USERS = 150
+
+# Since update to Django 3.0
+DEFAULT_AUTO_FIELD='django.db.models.AutoField'
